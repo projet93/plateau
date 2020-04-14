@@ -34,7 +34,8 @@ entity Plateau {
     heureFin String,
     adresse String,
     nbrEquipe Integer,
-    statut Statut
+    statut Statut,
+    valid Boolean
 }
 
 enum Statut{
