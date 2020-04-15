@@ -81,6 +81,7 @@ public class PlateauCriteria implements Serializable, Criteria {
         this.valid = other.valid == null ? null : other.valid.copy();
         this.referentId = other.referentId == null ? null : other.referentId.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
+        this.userId = other.userId == null ? null : other.userId.copy();
     }
 
     @Override
@@ -176,7 +177,7 @@ public class PlateauCriteria implements Serializable, Criteria {
         this.userId = userId;
     }
 
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -197,6 +198,7 @@ public class PlateauCriteria implements Serializable, Criteria {
             Objects.equals(statut, that.statut) &&
             Objects.equals(valid, that.valid) &&
             Objects.equals(referentId, that.referentId) &&
+            Objects.equals(userId, that.userId) &&
             Objects.equals(userId, that.userId);
     }
 
@@ -213,6 +215,7 @@ public class PlateauCriteria implements Serializable, Criteria {
         statut,
         valid,
         referentId,
+        userId,
         userId
         );
     }
@@ -230,6 +233,7 @@ public class PlateauCriteria implements Serializable, Criteria {
                 (statut != null ? "statut=" + statut + ", " : "") +
                 (valid != null ? "valid=" + valid + ", " : "") +
                 (referentId != null ? "referentId=" + referentId + ", " : "") +
+                (userId != null ? "userId=" + userId + ", " : "") +
                 (userId != null ? "userId=" + userId + ", " : "") +
             "}";
     }

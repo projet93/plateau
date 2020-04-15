@@ -26,8 +26,8 @@
       "nbrEquipe": "Nbr Equipe",
       "statut": "Statut",
       "valid": "Valid",
-      "user": "User",
-      "referent": "Referent"
+      "referent": "Referent",
+      "user": "User"
     }
   }
 }

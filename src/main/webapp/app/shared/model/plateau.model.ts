@@ -1,6 +1,6 @@
 import { Moment } from 'moment';
-import { IUser } from 'app/core/user/user.model';
 import { IReferent } from 'app/shared/model/referent.model';
+import { IUser } from 'app/core/user/user.model';
 import { Statut } from 'app/shared/model/enumerations/statut.model';
 
 export interface IPlateau {
@@ -15,8 +15,8 @@ export interface IPlateau {
   nbrEquipe?: number;
   statut?: Statut;
   valid?: boolean;
-  user?: IUser;
   referent?: IReferent;
+  user?: IUser;
 }
 
 export class Plateau implements IPlateau {
@@ -32,8 +32,8 @@ export class Plateau implements IPlateau {
     public nbrEquipe?: number,
     public statut?: Statut,
     public valid?: boolean,
-    public user?: IUser,
-    public referent?: IReferent
+    public referent?: IReferent,
+    public user?: IUser
   ) {
     this.valid = this.valid || false;
   }

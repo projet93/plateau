@@ -58,6 +58,17 @@
 
     <changeSet id="20200414130300-1-relations" author="jhipster">
 
+        <createTable tableName="plateau_user">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="plateau_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="plateau_id, user_id" tableName="plateau_user"/>
+        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 

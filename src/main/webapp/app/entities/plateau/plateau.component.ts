@@ -142,6 +142,6 @@ export class PlateauComponent implements OnInit, OnDestroy {
   }
   
   setActive(plateau: IPlateau, isActivated: boolean): void {
-    this.plateauService.update({ ...plateau, valid: isActivated }).subscribe(() => this.loadAll());
+    this.plateauService.update({ ...plateau, valid: isActivated }).subscribe(() => this.loadPage());
   }
 }

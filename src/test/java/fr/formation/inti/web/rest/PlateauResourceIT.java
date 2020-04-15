@@ -28,6 +28,7 @@ import org.springframework.util.Base64Utils;
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -82,6 +83,12 @@ public class PlateauResourceIT {
 
     @Autowired
     private PlateauRepository plateauRepository;
+
+    @Mock
+    private PlateauRepository plateauRepositoryMock;
+
+    @Mock
+    private PlateauService plateauServiceMock;
 
     @Autowired
     private PlateauService plateauService;
@@ -227,6 +234,26 @@ public class PlateauResourceIT {
             .andExpect(jsonPath("$.[*].valid").value(hasItem(DEFAULT_VALID.booleanValue())));
     }
     
+    @SuppressWarnings({"unchecked"})
+    public void getAllPlateausWithEagerRelationshipsIsEnabled() throws Exception {
+        when(plateauServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restPlateauMockMvc.perform(get("/api/plateaus?eagerload=true"))
+            .andExpect(status().isOk());
+
+        verify(plateauServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({"unchecked"})
+    public void getAllPlateausWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(plateauServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restPlateauMockMvc.perform(get("/api/plateaus?eagerload=true"))
+            .andExpect(status().isOk());
+
+        verify(plateauServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
     @Test
     @Transactional
     public void getPlateau() throws Exception {
@@ -943,6 +970,7 @@ public class PlateauResourceIT {
     }
 
 
+    
     @Test
     @Transactional
     public void getAllPlateausByUserIsEqualToSomething() throws Exception {
@@ -951,7 +979,7 @@ public class PlateauResourceIT {
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
         em.flush();
-        plateau.setUser(user);
+        plateau.addUser(user);
         plateauRepository.saveAndFlush(plateau);
         Long userId = user.getId();
 

@@ -121,6 +121,10 @@ public class PlateauQueryService extends QueryService<Plateau> {
                 specification = specification.and(buildSpecification(criteria.getUserId(),
                     root -> root.join(Plateau_.user, JoinType.LEFT).get(User_.id)));
             }
+            if (criteria.getUserId() != null) {
+                specification = specification.and(buildSpecification(criteria.getUserId(),
+                    root -> root.join(Plateau_.users, JoinType.LEFT).get(User_.id)));
+            }
         }
         return specification;
     }

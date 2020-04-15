@@ -53,7 +53,15 @@
             "otherEntityName": "user",
             "otherEntityRelationshipName": "plateau",
             "relationshipName": "user",
-            "otherEntityField": "login"
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "plateau",
+            "relationshipName": "user",
+            "otherEntityField": "id",
+            "ownerSide": true
         }
     ],
     "changelogDate": "20200414130300",

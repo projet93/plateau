@@ -150,3 +150,12 @@
   -webkit-animation-delay: 0s;
   animation-delay: 0s;
 }
+.jh-navbar{
+	background-color: #f72904 !important;
+}
+.jh-navlink{
+	color: #fff !important;
+}
+.jh-navlink a:hover,.jh-navlink a:focus {
+  color: gray;
+}

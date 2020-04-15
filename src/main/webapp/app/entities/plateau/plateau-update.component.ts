@@ -9,12 +9,12 @@ import { JhiDataUtils, JhiFileLoadError, JhiEventManager, JhiEventWithContent } 
 import { IPlateau, Plateau } from 'app/shared/model/plateau.model';
 import { PlateauService } from './plateau.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
-import { IUser } from 'app/core/user/user.model';
-import { UserService } from 'app/core/user/user.service';
 import { IReferent } from 'app/shared/model/referent.model';
 import { ReferentService } from 'app/entities/referent/referent.service';
+import { IUser } from 'app/core/user/user.model';
+import { UserService } from 'app/core/user/user.service';
 
-type SelectableEntity = IUser | IReferent;
+type SelectableEntity = IReferent | IUser;
 
 @Component({
   selector: 'jhi-plateau-update',
@@ -22,8 +22,8 @@ type SelectableEntity = IUser | IReferent;
 })
 export class PlateauUpdateComponent implements OnInit {
   isSaving = false;
-  users: IUser[] = [];
   referents: IReferent[] = [];
+  users: IUser[] = [];
   dateDebutDp: any;
   dateFinDp: any;
 
@@ -39,16 +39,16 @@ export class PlateauUpdateComponent implements OnInit {
     nbrEquipe: [],
     statut: [],
     valid: [],
-    user: [],
-    referent: []
+    referent: [],
+    user: []
   });
 
   constructor(
     protected dataUtils: JhiDataUtils,
     protected eventManager: JhiEventManager,
     protected plateauService: PlateauService,
-    protected userService: UserService,
     protected referentService: ReferentService,
+    protected userService: UserService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -57,9 +57,9 @@ export class PlateauUpdateComponent implements OnInit {
     this.activatedRoute.data.subscribe(({ plateau }) => {
       this.updateForm(plateau);
 
-      this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
-
       this.referentService.query().subscribe((res: HttpResponse<IReferent[]>) => (this.referents = res.body || []));
+
+      this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
     });
   }
 
@@ -76,8 +76,8 @@ export class PlateauUpdateComponent implements OnInit {
       nbrEquipe: plateau.nbrEquipe,
       statut: plateau.statut,
       valid: plateau.valid,
-      user: plateau.user,
-      referent: plateau.referent
+      referent: plateau.referent,
+      user: plateau.user
     });
   }
 
@@ -125,8 +125,8 @@ export class PlateauUpdateComponent implements OnInit {
       nbrEquipe: this.editForm.get(['nbrEquipe'])!.value,
       statut: this.editForm.get(['statut'])!.value,
       valid: this.editForm.get(['valid'])!.value,
-      user: this.editForm.get(['user'])!.value,
-      referent: this.editForm.get(['referent'])!.value
+      referent: this.editForm.get(['referent'])!.value,
+      user: this.editForm.get(['user'])!.value
     };
   }
 

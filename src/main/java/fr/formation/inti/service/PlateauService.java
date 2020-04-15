@@ -29,6 +29,13 @@ public interface PlateauService {
     Page<Plateau> findAll(Pageable pageable);
 
     /**
+     * Get all the plateaus with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    Page<Plateau> findAllWithEagerRelationships(Pageable pageable);
+
+    /**
      * Get the "id" plateau.
      *
      * @param id the id of the entity.

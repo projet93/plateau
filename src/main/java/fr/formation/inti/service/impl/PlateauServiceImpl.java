@@ -62,6 +62,15 @@ public class PlateauServiceImpl implements PlateauService {
     }
 
     /**
+     * Get all the plateaus with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    public Page<Plateau> findAllWithEagerRelationships(Pageable pageable) {
+        return plateauRepository.findAllWithEagerRelationships(pageable);
+    }
+
+    /**
      * Get one plateau by id.
      *
      * @param id the id of the entity.
@@ -71,7 +80,7 @@ public class PlateauServiceImpl implements PlateauService {
     @Transactional(readOnly = true)
     public Optional<Plateau> findOne(Long id) {
         log.debug("Request to get Plateau : {}", id);
-        return plateauRepository.findById(id);
+        return plateauRepository.findOneWithEagerRelationships(id);
     }
 
     /**

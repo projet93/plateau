@@ -49,13 +49,16 @@ relationship OneToMany {
 	
 }
 relationship ManyToMany {
-    Club{categorie(section)} to Categorie{club(nom)}
-   
+    Club{categorie(section)} to Categorie{club(nom)},
+    Plateau{user} to User,
+    Referent{user} to User,
+    Categorie{user} to User,
+    Stade{user} to User
 }
 
 relationship ManyToOne {
     Plateau{referent(nom)} to Referent,
-    Plateau{user(login)} to User
+    Plateau{user} to User
 }
 paginate Plateau, Club, Stade with infinite-scroll
 paginate Plateau, Club, Stade, Referent with pagination
