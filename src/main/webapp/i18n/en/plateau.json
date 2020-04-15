@@ -21,8 +21,12 @@
       "dateFin": "Date Fin",
       "heureDebut": "Heure Debut",
       "heureFin": "Heure Fin",
+      "programme": "Programme",
       "adresse": "Adresse",
       "nbrEquipe": "Nbr Equipe",
+      "statut": "Statut",
+      "valid": "Valid",
+      "user": "User",
       "referent": "Referent"
     }
   }

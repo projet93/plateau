@@ -11,6 +11,8 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.time.LocalDate;
 
+import fr.formation.inti.domain.enumeration.Statut;
+
 /**
  * A Plateau.
  */
@@ -38,15 +40,33 @@ public class Plateau implements Serializable {
     @Column(name = "heure_fin")
     private String heureFin;
 
+    @Lob
+    @Column(name = "programme")
+    private byte[] programme;
+
+    @Column(name = "programme_content_type")
+    private String programmeContentType;
+
     @Column(name = "adresse")
     private String adresse;
 
     @Column(name = "nbr_equipe")
     private Integer nbrEquipe;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "statut")
+    private Statut statut;
+
+    @Column(name = "valid")
+    private Boolean valid;
+
     @ManyToOne
     @JsonIgnoreProperties("plateaus")
     private Referent referent;
+
+    @ManyToOne
+    @JsonIgnoreProperties("plateaus")
+    private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -109,6 +129,32 @@ public class Plateau implements Serializable {
         this.heureFin = heureFin;
     }
 
+    public byte[] getProgramme() {
+        return programme;
+    }
+
+    public Plateau programme(byte[] programme) {
+        this.programme = programme;
+        return this;
+    }
+
+    public void setProgramme(byte[] programme) {
+        this.programme = programme;
+    }
+
+    public String getProgrammeContentType() {
+        return programmeContentType;
+    }
+
+    public Plateau programmeContentType(String programmeContentType) {
+        this.programmeContentType = programmeContentType;
+        return this;
+    }
+
+    public void setProgrammeContentType(String programmeContentType) {
+        this.programmeContentType = programmeContentType;
+    }
+
     public String getAdresse() {
         return adresse;
     }
@@ -135,6 +181,32 @@ public class Plateau implements Serializable {
         this.nbrEquipe = nbrEquipe;
     }
 
+    public Statut getStatut() {
+        return statut;
+    }
+
+    public Plateau statut(Statut statut) {
+        this.statut = statut;
+        return this;
+    }
+
+    public void setStatut(Statut statut) {
+        this.statut = statut;
+    }
+
+    public Boolean isValid() {
+        return valid;
+    }
+
+    public Plateau valid(Boolean valid) {
+        this.valid = valid;
+        return this;
+    }
+
+    public void setValid(Boolean valid) {
+        this.valid = valid;
+    }
+
     public Referent getReferent() {
         return referent;
     }
@@ -146,6 +218,19 @@ public class Plateau implements Serializable {
 
     public void setReferent(Referent referent) {
         this.referent = referent;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Plateau user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -173,8 +258,12 @@ public class Plateau implements Serializable {
             ", dateFin='" + getDateFin() + "'" +
             ", heureDebut='" + getHeureDebut() + "'" +
             ", heureFin='" + getHeureFin() + "'" +
+            ", programme='" + getProgramme() + "'" +
+            ", programmeContentType='" + getProgrammeContentType() + "'" +
             ", adresse='" + getAdresse() + "'" +
             ", nbrEquipe=" + getNbrEquipe() +
+            ", statut='" + getStatut() + "'" +
+            ", valid='" + isValid() + "'" +
             "}";
     }
 }

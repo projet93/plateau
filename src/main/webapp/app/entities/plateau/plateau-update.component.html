@@ -44,6 +44,25 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="plateauFffApp.plateau.programme" for="field_programme">Programme</label>
+                    <div>
+                        <div *ngIf="editForm.get('programme')!.value" class="form-text text-danger clearfix">
+                            <a class="pull-left" (click)="openFile(editForm.get('programmeContentType')!.value, editForm.get('programme')!.value)" jhiTranslate="entity.action.open">open</a><br>
+                            <span class="pull-left">{{ editForm.get('programmeContentType')!.value }}, {{ byteSize(editForm.get('programme')!.value) }}</span>
+                            <button type="button" (click)="editForm.patchValue({programme: null});editForm.patchValue({programmeContentType: null});"
+                                    class="btn btn-secondary btn-xs pull-right">
+                                <fa-icon icon="times"></fa-icon>
+                            </button>
+                        </div>
+                        <input type="file" id="file_programme" (change)="setFileData($event, 'programme', false)" jhiTranslate="entity.action.addblob"/>
+                    </div>
+                    <input type="hidden" class="form-control" name="programme" id="field_programme"
+                           formControlName="programme"/>
+                    <input type="hidden" class="form-control" name="programmeContentType" id="field_programmeContentType"
+                           formControlName="programmeContentType" />
+                </div>
+
+                <div class="form-group">
                     <label class="form-control-label" jhiTranslate="plateauFffApp.plateau.adresse" for="field_adresse">Adresse</label>
                     <input type="text" class="form-control" name="adresse" id="field_adresse"
                            formControlName="adresse"/>
@@ -56,10 +75,33 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="plateauFffApp.plateau.statut" for="field_statut">Statut</label>
+                    <select class="form-control" name="statut" formControlName="statut" id="field_statut">
+                        <option value="ENCOURS">{{ 'plateauFffApp.Statut.ENCOURS' | translate }}</option>
+                        <option value="COMPLET">{{ 'plateauFffApp.Statut.COMPLET' | translate }}</option>
+                        <option value="CLOTURE">{{ 'plateauFffApp.Statut.CLOTURE' | translate }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="plateauFffApp.plateau.valid" for="field_valid">Valid</label>
+                    <input type="checkbox" class="form-control" name="valid" id="field_valid"
+                           formControlName="valid"/>
+                </div>
+
+                <div class="form-group">
                     <label class="form-control-label" jhiTranslate="plateauFffApp.plateau.referent" for="field_referent">Referent</label>
                     <select class="form-control" id="field_referent" name="referent" formControlName="referent">
                         <option [ngValue]="null"></option>
                         <option [ngValue]="referentOption.id === editForm.get('referent')!.value?.id ? editForm.get('referent')!.value : referentOption" *ngFor="let referentOption of referents; trackBy: trackById">{{ referentOption.nom }}</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="plateauFffApp.plateau.user" for="field_user">User</label>
+                    <select class="form-control" id="field_user" name="user" formControlName="user">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="userOption.id === editForm.get('user')!.value?.id ? editForm.get('user')!.value : userOption" *ngFor="let userOption of users; trackBy: trackById">{{ userOption.login }}</option>
                     </select>
                 </div>
             </div>

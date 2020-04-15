@@ -14,5 +14,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="referent"/>
 
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="plateau"
+                                 constraintName="fk_plateau_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
     </changeSet>
 </databaseChangeLog>

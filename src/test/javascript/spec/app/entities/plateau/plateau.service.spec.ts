@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { DATE_FORMAT } from 'app/shared/constants/input.constants';
 import { PlateauService } from 'app/entities/plateau/plateau.service';
 import { IPlateau, Plateau } from 'app/shared/model/plateau.model';
+import { Statut } from 'app/shared/model/enumerations/statut.model';
 
 describe('Service Tests', () => {
   describe('Plateau Service', () => {
@@ -24,7 +25,19 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new Plateau(0, currentDate, currentDate, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 0);
+      elemDefault = new Plateau(
+        0,
+        currentDate,
+        currentDate,
+        'AAAAAAA',
+        'AAAAAAA',
+        'image/png',
+        'AAAAAAA',
+        'AAAAAAA',
+        0,
+        Statut.ENCOURS,
+        false
+      );
     });
 
     describe('Service methods', () => {
@@ -76,8 +89,11 @@ describe('Service Tests', () => {
             dateFin: currentDate.format(DATE_FORMAT),
             heureDebut: 'BBBBBB',
             heureFin: 'BBBBBB',
+            programme: 'BBBBBB',
             adresse: 'BBBBBB',
-            nbrEquipe: 1
+            nbrEquipe: 1,
+            statut: 'BBBBBB',
+            valid: true
           },
           elemDefault
         );
@@ -104,8 +120,11 @@ describe('Service Tests', () => {
             dateFin: currentDate.format(DATE_FORMAT),
             heureDebut: 'BBBBBB',
             heureFin: 'BBBBBB',
+            programme: 'BBBBBB',
             adresse: 'BBBBBB',
-            nbrEquipe: 1
+            nbrEquipe: 1,
+            statut: 'BBBBBB',
+            valid: true
           },
           elemDefault
         );

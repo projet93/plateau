@@ -3,6 +3,7 @@ package fr.formation.inti.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
+import fr.formation.inti.domain.enumeration.Statut;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -22,6 +23,24 @@ import io.github.jhipster.service.filter.LocalDateFilter;
  * fix type specific filters.
  */
 public class PlateauCriteria implements Serializable, Criteria {
+    /**
+     * Class for filtering Statut
+     */
+    public static class StatutFilter extends Filter<Statut> {
+
+        public StatutFilter() {
+        }
+
+        public StatutFilter(StatutFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public StatutFilter copy() {
+            return new StatutFilter(this);
+        }
+
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -39,7 +58,13 @@ public class PlateauCriteria implements Serializable, Criteria {
 
     private IntegerFilter nbrEquipe;
 
+    private StatutFilter statut;
+
+    private BooleanFilter valid;
+
     private LongFilter referentId;
+
+    private LongFilter userId;
 
     public PlateauCriteria() {
     }
@@ -52,7 +77,10 @@ public class PlateauCriteria implements Serializable, Criteria {
         this.heureFin = other.heureFin == null ? null : other.heureFin.copy();
         this.adresse = other.adresse == null ? null : other.adresse.copy();
         this.nbrEquipe = other.nbrEquipe == null ? null : other.nbrEquipe.copy();
+        this.statut = other.statut == null ? null : other.statut.copy();
+        this.valid = other.valid == null ? null : other.valid.copy();
         this.referentId = other.referentId == null ? null : other.referentId.copy();
+        this.userId = other.userId == null ? null : other.userId.copy();
     }
 
     @Override
@@ -116,12 +144,36 @@ public class PlateauCriteria implements Serializable, Criteria {
         this.nbrEquipe = nbrEquipe;
     }
 
+    public StatutFilter getStatut() {
+        return statut;
+    }
+
+    public void setStatut(StatutFilter statut) {
+        this.statut = statut;
+    }
+
+    public BooleanFilter getValid() {
+        return valid;
+    }
+
+    public void setValid(BooleanFilter valid) {
+        this.valid = valid;
+    }
+
     public LongFilter getReferentId() {
         return referentId;
     }
 
     public void setReferentId(LongFilter referentId) {
         this.referentId = referentId;
+    }
+
+    public LongFilter getUserId() {
+        return userId;
+    }
+
+    public void setUserId(LongFilter userId) {
+        this.userId = userId;
     }
 
 
@@ -142,7 +194,10 @@ public class PlateauCriteria implements Serializable, Criteria {
             Objects.equals(heureFin, that.heureFin) &&
             Objects.equals(adresse, that.adresse) &&
             Objects.equals(nbrEquipe, that.nbrEquipe) &&
-            Objects.equals(referentId, that.referentId);
+            Objects.equals(statut, that.statut) &&
+            Objects.equals(valid, that.valid) &&
+            Objects.equals(referentId, that.referentId) &&
+            Objects.equals(userId, that.userId);
     }
 
     @Override
@@ -155,7 +210,10 @@ public class PlateauCriteria implements Serializable, Criteria {
         heureFin,
         adresse,
         nbrEquipe,
-        referentId
+        statut,
+        valid,
+        referentId,
+        userId
         );
     }
 
@@ -169,7 +227,10 @@ public class PlateauCriteria implements Serializable, Criteria {
                 (heureFin != null ? "heureFin=" + heureFin + ", " : "") +
                 (adresse != null ? "adresse=" + adresse + ", " : "") +
                 (nbrEquipe != null ? "nbrEquipe=" + nbrEquipe + ", " : "") +
+                (statut != null ? "statut=" + statut + ", " : "") +
+                (valid != null ? "valid=" + valid + ", " : "") +
                 (referentId != null ? "referentId=" + referentId + ", " : "") +
+                (userId != null ? "userId=" + userId + ", " : "") +
             "}";
     }
 

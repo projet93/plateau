@@ -2,7 +2,7 @@
   "plateauFffApp": {
     "plateau": {
       "home": {
-        "title": "Plateaux",
+        "title": "Plateaus",
         "createLabel": "Créer un nouveau Plateau",
         "createOrEditLabel": "Créer ou éditer un Plateau",
         "search": "Recherche pour Plateau",
@@ -21,8 +21,12 @@
       "dateFin": "Date Fin",
       "heureDebut": "Heure Debut",
       "heureFin": "Heure Fin",
+      "programme": "Programme",
       "adresse": "Adresse",
       "nbrEquipe": "Nbr Equipe",
+      "statut": "Statut",
+      "valid": "Valid",
+      "user": "User",
       "referent": "Referent"
     }
   }

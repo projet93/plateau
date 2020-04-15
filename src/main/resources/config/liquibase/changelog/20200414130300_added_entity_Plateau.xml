@@ -28,13 +28,28 @@
             <column name="heure_fin" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="programme" type="longblob">
+                <constraints nullable="true" />
+            </column>
+            <column name="programme_content_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="adresse" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="nbr_equipe" type="integer">
                 <constraints nullable="true" />
             </column>
+            <column name="statut" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="valid" type="boolean">
+                <constraints nullable="true" />
+            </column>
             <column name="referent_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="user_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
@@ -64,8 +79,12 @@
             <column name="date_fin" type="date"/>
             <column name="heure_debut" type="string"/>
             <column name="heure_fin" type="string"/>
+            <column name="programme" type="blob"/>
+            <column name="programme_content_type" type="string"/>
             <column name="adresse" type="string"/>
             <column name="nbr_equipe" type="numeric"/>
+            <column name="statut" type="string"/>
+            <column name="valid" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

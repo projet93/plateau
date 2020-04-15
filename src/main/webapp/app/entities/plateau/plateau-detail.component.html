@@ -24,6 +24,13 @@
                 <dd>
                     <span>{{ plateau.heureFin }}</span>
                 </dd>
+                <dt><span jhiTranslate="plateauFffApp.plateau.programme">Programme</span></dt>
+                <dd>
+                    <div *ngIf="plateau.programme">
+                        <a (click)="openFile(plateau?.programmeContentType!, plateau?.programme)" jhiTranslate="entity.action.open">open</a>
+                        {{ plateau.programmeContentType }}, {{ byteSize(plateau.programme) }}
+                    </div>
+                </dd>
                 <dt><span jhiTranslate="plateauFffApp.plateau.adresse">Adresse</span></dt>
                 <dd>
                     <span>{{ plateau.adresse }}</span>
@@ -32,11 +39,23 @@
                 <dd>
                     <span>{{ plateau.nbrEquipe }}</span>
                 </dd>
+                <dt><span jhiTranslate="plateauFffApp.plateau.statut">Statut</span></dt>
+                <dd>
+                    <span jhiTranslate="{{ 'plateauFffApp.Statut.' + plateau.statut }}">{{ plateau.statut }}</span>
+                </dd>
+                <dt><span jhiTranslate="plateauFffApp.plateau.valid">Valid</span></dt>
+                <dd>
+                    <span>{{ plateau.valid }}</span>
+                </dd>
                 <dt><span jhiTranslate="plateauFffApp.plateau.referent">Referent</span></dt>
                 <dd>
                     <div *ngIf="plateau.referent">
                         <a [routerLink]="['/referent', plateau.referent?.id, 'view']">{{ plateau.referent?.nom }}</a>
                     </div>
+                </dd>
+                <dt><span jhiTranslate="plateauFffApp.plateau.user">User</span></dt>
+                <dd>
+                    {{ plateau.user?.login }}
                 </dd>
             </dl>
 

@@ -76,8 +76,11 @@ class PlateauGatlingTest extends Simulation {
                 , "dateFin":"2020-01-01T00:00:00.000Z"
                 , "heureDebut":"SAMPLE_TEXT"
                 , "heureFin":"SAMPLE_TEXT"
+                , "programme":null
                 , "adresse":"SAMPLE_TEXT"
                 , "nbrEquipe":"0"
+                , "statut":"ENCOURS"
+                , "valid":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_plateau_url"))).exitHereIfFailed

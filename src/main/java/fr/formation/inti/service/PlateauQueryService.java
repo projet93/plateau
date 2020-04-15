@@ -107,9 +107,19 @@ public class PlateauQueryService extends QueryService<Plateau> {
             if (criteria.getNbrEquipe() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getNbrEquipe(), Plateau_.nbrEquipe));
             }
+            if (criteria.getStatut() != null) {
+                specification = specification.and(buildSpecification(criteria.getStatut(), Plateau_.statut));
+            }
+            if (criteria.getValid() != null) {
+                specification = specification.and(buildSpecification(criteria.getValid(), Plateau_.valid));
+            }
             if (criteria.getReferentId() != null) {
                 specification = specification.and(buildSpecification(criteria.getReferentId(),
                     root -> root.join(Plateau_.referent, JoinType.LEFT).get(Referent_.id)));
+            }
+            if (criteria.getUserId() != null) {
+                specification = specification.and(buildSpecification(criteria.getUserId(),
+                    root -> root.join(Plateau_.user, JoinType.LEFT).get(User_.id)));
             }
         }
         return specification;

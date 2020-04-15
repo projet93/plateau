@@ -1,0 +1,10 @@
+{
+  "plateauFffApp": {
+    "Statut": {
+      "null": "",
+      "ENCOURS": "ENCOURS",
+      "COMPLET": "COMPLET",
+      "CLOTURE": "CLOTURE"
+    }
+  }
+}

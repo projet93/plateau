@@ -43,7 +43,7 @@ export const plateauRoute: Routes = [
       pagingParams: JhiResolvePagingParams
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER,Authority.ADMIN],
       defaultSort: 'id,asc',
       pageTitle: 'plateauFffApp.plateau.home.title'
     },
@@ -56,7 +56,7 @@ export const plateauRoute: Routes = [
       plateau: PlateauResolve
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER,Authority.ADMIN],
       pageTitle: 'plateauFffApp.plateau.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -68,7 +68,7 @@ export const plateauRoute: Routes = [
       plateau: PlateauResolve
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER,Authority.ADMIN],
       pageTitle: 'plateauFffApp.plateau.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -80,7 +80,7 @@ export const plateauRoute: Routes = [
       plateau: PlateauResolve
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.USER,Authority.ADMIN],
       pageTitle: 'plateauFffApp.plateau.home.title'
     },
     canActivate: [UserRouteAccessService]

@@ -3,6 +3,7 @@ package fr.formation.inti.web.rest;
 import fr.formation.inti.PlateauFffApp;
 import fr.formation.inti.domain.Plateau;
 import fr.formation.inti.domain.Referent;
+import fr.formation.inti.domain.User;
 import fr.formation.inti.repository.PlateauRepository;
 import fr.formation.inti.repository.search.PlateauSearchRepository;
 import fr.formation.inti.service.PlateauService;
@@ -23,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 import javax.persistence.EntityManager;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -36,6 +38,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import fr.formation.inti.domain.enumeration.Statut;
 /**
  * Integration tests for the {@link PlateauResource} REST controller.
  */
@@ -59,12 +62,23 @@ public class PlateauResourceIT {
     private static final String DEFAULT_HEURE_FIN = "AAAAAAAAAA";
     private static final String UPDATED_HEURE_FIN = "BBBBBBBBBB";
 
+    private static final byte[] DEFAULT_PROGRAMME = TestUtil.createByteArray(1, "0");
+    private static final byte[] UPDATED_PROGRAMME = TestUtil.createByteArray(1, "1");
+    private static final String DEFAULT_PROGRAMME_CONTENT_TYPE = "image/jpg";
+    private static final String UPDATED_PROGRAMME_CONTENT_TYPE = "image/png";
+
     private static final String DEFAULT_ADRESSE = "AAAAAAAAAA";
     private static final String UPDATED_ADRESSE = "BBBBBBBBBB";
 
     private static final Integer DEFAULT_NBR_EQUIPE = 1;
     private static final Integer UPDATED_NBR_EQUIPE = 2;
     private static final Integer SMALLER_NBR_EQUIPE = 1 - 1;
+
+    private static final Statut DEFAULT_STATUT = Statut.ENCOURS;
+    private static final Statut UPDATED_STATUT = Statut.COMPLET;
+
+    private static final Boolean DEFAULT_VALID = false;
+    private static final Boolean UPDATED_VALID = true;
 
     @Autowired
     private PlateauRepository plateauRepository;
@@ -103,8 +117,12 @@ public class PlateauResourceIT {
             .dateFin(DEFAULT_DATE_FIN)
             .heureDebut(DEFAULT_HEURE_DEBUT)
             .heureFin(DEFAULT_HEURE_FIN)
+            .programme(DEFAULT_PROGRAMME)
+            .programmeContentType(DEFAULT_PROGRAMME_CONTENT_TYPE)
             .adresse(DEFAULT_ADRESSE)
-            .nbrEquipe(DEFAULT_NBR_EQUIPE);
+            .nbrEquipe(DEFAULT_NBR_EQUIPE)
+            .statut(DEFAULT_STATUT)
+            .valid(DEFAULT_VALID);
         return plateau;
     }
     /**
@@ -119,8 +137,12 @@ public class PlateauResourceIT {
             .dateFin(UPDATED_DATE_FIN)
             .heureDebut(UPDATED_HEURE_DEBUT)
             .heureFin(UPDATED_HEURE_FIN)
+            .programme(UPDATED_PROGRAMME)
+            .programmeContentType(UPDATED_PROGRAMME_CONTENT_TYPE)
             .adresse(UPDATED_ADRESSE)
-            .nbrEquipe(UPDATED_NBR_EQUIPE);
+            .nbrEquipe(UPDATED_NBR_EQUIPE)
+            .statut(UPDATED_STATUT)
+            .valid(UPDATED_VALID);
         return plateau;
     }
 
@@ -148,8 +170,12 @@ public class PlateauResourceIT {
         assertThat(testPlateau.getDateFin()).isEqualTo(DEFAULT_DATE_FIN);
         assertThat(testPlateau.getHeureDebut()).isEqualTo(DEFAULT_HEURE_DEBUT);
         assertThat(testPlateau.getHeureFin()).isEqualTo(DEFAULT_HEURE_FIN);
+        assertThat(testPlateau.getProgramme()).isEqualTo(DEFAULT_PROGRAMME);
+        assertThat(testPlateau.getProgrammeContentType()).isEqualTo(DEFAULT_PROGRAMME_CONTENT_TYPE);
         assertThat(testPlateau.getAdresse()).isEqualTo(DEFAULT_ADRESSE);
         assertThat(testPlateau.getNbrEquipe()).isEqualTo(DEFAULT_NBR_EQUIPE);
+        assertThat(testPlateau.getStatut()).isEqualTo(DEFAULT_STATUT);
+        assertThat(testPlateau.isValid()).isEqualTo(DEFAULT_VALID);
 
         // Validate the Plateau in Elasticsearch
         verify(mockPlateauSearchRepository, times(1)).save(testPlateau);
@@ -193,8 +219,12 @@ public class PlateauResourceIT {
             .andExpect(jsonPath("$.[*].dateFin").value(hasItem(DEFAULT_DATE_FIN.toString())))
             .andExpect(jsonPath("$.[*].heureDebut").value(hasItem(DEFAULT_HEURE_DEBUT)))
             .andExpect(jsonPath("$.[*].heureFin").value(hasItem(DEFAULT_HEURE_FIN)))
+            .andExpect(jsonPath("$.[*].programmeContentType").value(hasItem(DEFAULT_PROGRAMME_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].programme").value(hasItem(Base64Utils.encodeToString(DEFAULT_PROGRAMME))))
             .andExpect(jsonPath("$.[*].adresse").value(hasItem(DEFAULT_ADRESSE)))
-            .andExpect(jsonPath("$.[*].nbrEquipe").value(hasItem(DEFAULT_NBR_EQUIPE)));
+            .andExpect(jsonPath("$.[*].nbrEquipe").value(hasItem(DEFAULT_NBR_EQUIPE)))
+            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())))
+            .andExpect(jsonPath("$.[*].valid").value(hasItem(DEFAULT_VALID.booleanValue())));
     }
     
     @Test
@@ -212,8 +242,12 @@ public class PlateauResourceIT {
             .andExpect(jsonPath("$.dateFin").value(DEFAULT_DATE_FIN.toString()))
             .andExpect(jsonPath("$.heureDebut").value(DEFAULT_HEURE_DEBUT))
             .andExpect(jsonPath("$.heureFin").value(DEFAULT_HEURE_FIN))
+            .andExpect(jsonPath("$.programmeContentType").value(DEFAULT_PROGRAMME_CONTENT_TYPE))
+            .andExpect(jsonPath("$.programme").value(Base64Utils.encodeToString(DEFAULT_PROGRAMME)))
             .andExpect(jsonPath("$.adresse").value(DEFAULT_ADRESSE))
-            .andExpect(jsonPath("$.nbrEquipe").value(DEFAULT_NBR_EQUIPE));
+            .andExpect(jsonPath("$.nbrEquipe").value(DEFAULT_NBR_EQUIPE))
+            .andExpect(jsonPath("$.statut").value(DEFAULT_STATUT.toString()))
+            .andExpect(jsonPath("$.valid").value(DEFAULT_VALID.booleanValue()));
     }
 
 
@@ -787,6 +821,110 @@ public class PlateauResourceIT {
 
     @Test
     @Transactional
+    public void getAllPlateausByStatutIsEqualToSomething() throws Exception {
+        // Initialize the database
+        plateauRepository.saveAndFlush(plateau);
+
+        // Get all the plateauList where statut equals to DEFAULT_STATUT
+        defaultPlateauShouldBeFound("statut.equals=" + DEFAULT_STATUT);
+
+        // Get all the plateauList where statut equals to UPDATED_STATUT
+        defaultPlateauShouldNotBeFound("statut.equals=" + UPDATED_STATUT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPlateausByStatutIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        plateauRepository.saveAndFlush(plateau);
+
+        // Get all the plateauList where statut not equals to DEFAULT_STATUT
+        defaultPlateauShouldNotBeFound("statut.notEquals=" + DEFAULT_STATUT);
+
+        // Get all the plateauList where statut not equals to UPDATED_STATUT
+        defaultPlateauShouldBeFound("statut.notEquals=" + UPDATED_STATUT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPlateausByStatutIsInShouldWork() throws Exception {
+        // Initialize the database
+        plateauRepository.saveAndFlush(plateau);
+
+        // Get all the plateauList where statut in DEFAULT_STATUT or UPDATED_STATUT
+        defaultPlateauShouldBeFound("statut.in=" + DEFAULT_STATUT + "," + UPDATED_STATUT);
+
+        // Get all the plateauList where statut equals to UPDATED_STATUT
+        defaultPlateauShouldNotBeFound("statut.in=" + UPDATED_STATUT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPlateausByStatutIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        plateauRepository.saveAndFlush(plateau);
+
+        // Get all the plateauList where statut is not null
+        defaultPlateauShouldBeFound("statut.specified=true");
+
+        // Get all the plateauList where statut is null
+        defaultPlateauShouldNotBeFound("statut.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllPlateausByValidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        plateauRepository.saveAndFlush(plateau);
+
+        // Get all the plateauList where valid equals to DEFAULT_VALID
+        defaultPlateauShouldBeFound("valid.equals=" + DEFAULT_VALID);
+
+        // Get all the plateauList where valid equals to UPDATED_VALID
+        defaultPlateauShouldNotBeFound("valid.equals=" + UPDATED_VALID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPlateausByValidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        plateauRepository.saveAndFlush(plateau);
+
+        // Get all the plateauList where valid not equals to DEFAULT_VALID
+        defaultPlateauShouldNotBeFound("valid.notEquals=" + DEFAULT_VALID);
+
+        // Get all the plateauList where valid not equals to UPDATED_VALID
+        defaultPlateauShouldBeFound("valid.notEquals=" + UPDATED_VALID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPlateausByValidIsInShouldWork() throws Exception {
+        // Initialize the database
+        plateauRepository.saveAndFlush(plateau);
+
+        // Get all the plateauList where valid in DEFAULT_VALID or UPDATED_VALID
+        defaultPlateauShouldBeFound("valid.in=" + DEFAULT_VALID + "," + UPDATED_VALID);
+
+        // Get all the plateauList where valid equals to UPDATED_VALID
+        defaultPlateauShouldNotBeFound("valid.in=" + UPDATED_VALID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllPlateausByValidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        plateauRepository.saveAndFlush(plateau);
+
+        // Get all the plateauList where valid is not null
+        defaultPlateauShouldBeFound("valid.specified=true");
+
+        // Get all the plateauList where valid is null
+        defaultPlateauShouldNotBeFound("valid.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllPlateausByReferentIsEqualToSomething() throws Exception {
         // Initialize the database
         plateauRepository.saveAndFlush(plateau);
@@ -804,6 +942,26 @@ public class PlateauResourceIT {
         defaultPlateauShouldNotBeFound("referentId.equals=" + (referentId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllPlateausByUserIsEqualToSomething() throws Exception {
+        // Initialize the database
+        plateauRepository.saveAndFlush(plateau);
+        User user = UserResourceIT.createEntity(em);
+        em.persist(user);
+        em.flush();
+        plateau.setUser(user);
+        plateauRepository.saveAndFlush(plateau);
+        Long userId = user.getId();
+
+        // Get all the plateauList where user equals to userId
+        defaultPlateauShouldBeFound("userId.equals=" + userId);
+
+        // Get all the plateauList where user equals to userId + 1
+        defaultPlateauShouldNotBeFound("userId.equals=" + (userId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -816,8 +974,12 @@ public class PlateauResourceIT {
             .andExpect(jsonPath("$.[*].dateFin").value(hasItem(DEFAULT_DATE_FIN.toString())))
             .andExpect(jsonPath("$.[*].heureDebut").value(hasItem(DEFAULT_HEURE_DEBUT)))
             .andExpect(jsonPath("$.[*].heureFin").value(hasItem(DEFAULT_HEURE_FIN)))
+            .andExpect(jsonPath("$.[*].programmeContentType").value(hasItem(DEFAULT_PROGRAMME_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].programme").value(hasItem(Base64Utils.encodeToString(DEFAULT_PROGRAMME))))
             .andExpect(jsonPath("$.[*].adresse").value(hasItem(DEFAULT_ADRESSE)))
-            .andExpect(jsonPath("$.[*].nbrEquipe").value(hasItem(DEFAULT_NBR_EQUIPE)));
+            .andExpect(jsonPath("$.[*].nbrEquipe").value(hasItem(DEFAULT_NBR_EQUIPE)))
+            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())))
+            .andExpect(jsonPath("$.[*].valid").value(hasItem(DEFAULT_VALID.booleanValue())));
 
         // Check, that the count call also returns 1
         restPlateauMockMvc.perform(get("/api/plateaus/count?sort=id,desc&" + filter))
@@ -871,8 +1033,12 @@ public class PlateauResourceIT {
             .dateFin(UPDATED_DATE_FIN)
             .heureDebut(UPDATED_HEURE_DEBUT)
             .heureFin(UPDATED_HEURE_FIN)
+            .programme(UPDATED_PROGRAMME)
+            .programmeContentType(UPDATED_PROGRAMME_CONTENT_TYPE)
             .adresse(UPDATED_ADRESSE)
-            .nbrEquipe(UPDATED_NBR_EQUIPE);
+            .nbrEquipe(UPDATED_NBR_EQUIPE)
+            .statut(UPDATED_STATUT)
+            .valid(UPDATED_VALID);
 
         restPlateauMockMvc.perform(put("/api/plateaus")
             .contentType(MediaType.APPLICATION_JSON)
@@ -887,8 +1053,12 @@ public class PlateauResourceIT {
         assertThat(testPlateau.getDateFin()).isEqualTo(UPDATED_DATE_FIN);
         assertThat(testPlateau.getHeureDebut()).isEqualTo(UPDATED_HEURE_DEBUT);
         assertThat(testPlateau.getHeureFin()).isEqualTo(UPDATED_HEURE_FIN);
+        assertThat(testPlateau.getProgramme()).isEqualTo(UPDATED_PROGRAMME);
+        assertThat(testPlateau.getProgrammeContentType()).isEqualTo(UPDATED_PROGRAMME_CONTENT_TYPE);
         assertThat(testPlateau.getAdresse()).isEqualTo(UPDATED_ADRESSE);
         assertThat(testPlateau.getNbrEquipe()).isEqualTo(UPDATED_NBR_EQUIPE);
+        assertThat(testPlateau.getStatut()).isEqualTo(UPDATED_STATUT);
+        assertThat(testPlateau.isValid()).isEqualTo(UPDATED_VALID);
 
         // Validate the Plateau in Elasticsearch
         verify(mockPlateauSearchRepository, times(1)).save(testPlateau);
@@ -952,7 +1122,11 @@ public class PlateauResourceIT {
             .andExpect(jsonPath("$.[*].dateFin").value(hasItem(DEFAULT_DATE_FIN.toString())))
             .andExpect(jsonPath("$.[*].heureDebut").value(hasItem(DEFAULT_HEURE_DEBUT)))
             .andExpect(jsonPath("$.[*].heureFin").value(hasItem(DEFAULT_HEURE_FIN)))
+            .andExpect(jsonPath("$.[*].programmeContentType").value(hasItem(DEFAULT_PROGRAMME_CONTENT_TYPE)))
+            .andExpect(jsonPath("$.[*].programme").value(hasItem(Base64Utils.encodeToString(DEFAULT_PROGRAMME))))
             .andExpect(jsonPath("$.[*].adresse").value(hasItem(DEFAULT_ADRESSE)))
-            .andExpect(jsonPath("$.[*].nbrEquipe").value(hasItem(DEFAULT_NBR_EQUIPE)));
+            .andExpect(jsonPath("$.[*].nbrEquipe").value(hasItem(DEFAULT_NBR_EQUIPE)))
+            .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())))
+            .andExpect(jsonPath("$.[*].valid").value(hasItem(DEFAULT_VALID.booleanValue())));
     }
 }

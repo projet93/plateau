@@ -18,12 +18,26 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "programme",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
+        },
+        {
             "fieldName": "adresse",
             "fieldType": "String"
         },
         {
             "fieldName": "nbrEquipe",
             "fieldType": "Integer"
+        },
+        {
+            "fieldName": "statut",
+            "fieldType": "Statut",
+            "fieldValues": "ENCOURS,COMPLET,CLOTURE"
+        },
+        {
+            "fieldName": "valid",
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [
@@ -33,6 +47,13 @@
             "otherEntityRelationshipName": "plateau",
             "relationshipName": "referent",
             "otherEntityField": "nom"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "plateau",
+            "relationshipName": "user",
+            "otherEntityField": "login"
         }
     ],
     "changelogDate": "20200414130300",

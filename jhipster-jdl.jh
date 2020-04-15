@@ -32,6 +32,7 @@ entity Plateau {
     dateFin LocalDate,
     heureDebut String,
     heureFin String,
+    programme Blob,
     adresse String,
     nbrEquipe Integer,
     statut Statut,
@@ -41,15 +42,20 @@ entity Plateau {
 enum Statut{
 	ENCOURS,COMPLET,CLOTURE
 }
+
+
 relationship OneToMany {
-	Club{stade(nom)} to Stade{club(nom)} 
+	Club{stade(nom)} to Stade{club(nom)}
+	
 }
 relationship ManyToMany {
     Club{categorie(section)} to Categorie{club(nom)}
+   
 }
 
 relationship ManyToOne {
-    Plateau{referent(nom)} to Referent
+    Plateau{referent(nom)} to Referent,
+    Plateau{user(login)} to User
 }
 paginate Plateau, Club, Stade with infinite-scroll
 paginate Plateau, Club, Stade, Referent with pagination
