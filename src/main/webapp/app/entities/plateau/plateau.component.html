@@ -25,6 +25,7 @@
 					<button class="input-group-append btn btn-info"
 						(click)="search(currentSearch)">
 						<fa-icon icon="search"></fa-icon>
+						
 					</button>
 
 					<button class="input-group-append btn btn-danger"
@@ -84,10 +85,13 @@
 					<td>{{ plateau.dateFin | date:'mediumDate' }}</td>
 					<td>{{ plateau.heureDebut }}</td>
 					<td>{{ plateau.heureFin }}</td>
-					<td><a *ngIf="plateau.programme"
-						(click)="openFile(plateau.programmeContentType, plateau.programme)"
-						jhiTranslate="entity.action.open">open</a> <span
-						*ngIf="plateau.programme">{{ plateau.programmeContentType}}, {{ byteSize(plateau.programme) }}</span></td>
+					<td>
+						<button id="jh-create-entity"
+				class="btn btn-primary btn-sm"
+				 (click)="openFile(plateau.programmeContentType, plateau.programme)">
+				 pdf
+			</button>
+						</td>
 					<td>{{ plateau.adresse }}</td>
 					<td>{{ plateau.nbrEquipe }}</td>
 					<td>
@@ -96,10 +100,8 @@
 								plateau.referent?.nom }}</a>
 						</div>
 					</td>
-					<td class="text-right">
-
-						<div class="btn-group" *jhiHasAnyAuthority="'ROLE_USER'">
-
+					<td class="text-right" *jhiHasAnyAuthority="'ROLE_USER'">
+						<div class="btn-group" *ngIf="!currentAccount || currentAccount.login === plateau.user.login">
 							<button type="submit"
 								[routerLink]="['/plateau', plateau.id, 'view']"
 								class="btn btn-info btn-sm">
@@ -110,6 +112,7 @@
 								[routerLink]="['/plateau', plateau.id, 'edit']"
 								class="btn btn-primary btn-sm">
 								<fa-icon icon="pencil-alt"></fa-icon>
+									
 							</button>
 
 							<button type="submit" (click)="delete(plateau)"
@@ -117,7 +120,16 @@
 								<fa-icon icon="times"></fa-icon>
 							</button>
 						</div>
-						<div class="btn-group" *jhiHasAnyAuthority="'ROLE_ADMIN'">
+						<div class="btn-group" *ngIf="currentAccount && currentAccount.login !== plateau.user.login">
+							<button type="submit"
+									[routerLink]="['/plateau', plateau.id, 'view']"
+									class="btn btn-info btn-sm">
+									<fa-icon icon="plus"><span class="hidden-sm-down">S'inscrire</span></fa-icon>
+							</button>
+						</div>
+					</td>
+					<td class="text-right" *jhiHasAnyAuthority="'ROLE_ADMIN'">
+						<div class="btn-group">
 							<button class="btn btn-danger btn-sm"
 								(click)="setActive(plateau, true)" *ngIf="!plateau.valid"
 								jhiTranslate="userManagement.deactivated">Deactivated</button>

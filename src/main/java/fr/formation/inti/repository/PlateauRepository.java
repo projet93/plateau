@@ -29,4 +29,7 @@ public interface PlateauRepository extends JpaRepository<Plateau, Long>, JpaSpec
 
     @Query("select plateau from Plateau plateau left join fetch plateau.users where plateau.id =:id")
     Optional<Plateau> findOneWithEagerRelationships(@Param("id") Long id);
+
+    @Query("select plateau from Plateau plateau where plateau.valid = true or plateau.user.login = ?#{principal.username}")
+	Page<Plateau> findByUserIsCurrentUser(Pageable pageable);
 }

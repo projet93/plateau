@@ -1,6 +1,7 @@
 package fr.formation.inti.web.rest;
 
 import fr.formation.inti.domain.Plateau;
+import fr.formation.inti.domain.Stade;
 import fr.formation.inti.domain.enumeration.Statut;
 import fr.formation.inti.repository.UserRepository;
 import fr.formation.inti.security.AuthoritiesConstants;
@@ -105,7 +106,8 @@ public class PlateauResource {
     }
 
     /**
-     * {@code GET  /plateaus} : get all the plateaus.
+     * {@code GET  /plateaus} : get all the plateaus if valid is true
+     *  and get All our plateaus 
      *
      * @param pageable the pagination information.
      * @param criteria the criteria which the requested entities should match.
@@ -114,7 +116,12 @@ public class PlateauResource {
     @GetMapping("/plateaus")
     public ResponseEntity<List<Plateau>> getAllPlateaus(PlateauCriteria criteria, Pageable pageable) {
         log.debug("REST request to get Plateaus by criteria: {}", criteria);
-        Page<Plateau> page = plateauQueryService.findByCriteria(criteria, pageable);
+        Page<Plateau> page;
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+        	page = plateauService.findByUserIsCurrentUser(pageable);
+        }else {
+        	page = plateauQueryService.findByCriteria(criteria, pageable);
+        }
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

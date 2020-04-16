@@ -2,9 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+import { Account } from 'app/core/user/account.model';
 import { JhiEventManager, JhiDataUtils } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-
+import { AccountService } from 'app/core/auth/account.service';
 import { IPlateau } from 'app/shared/model/plateau.model';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
@@ -17,6 +19,7 @@ import { PlateauDeleteDialogComponent } from './plateau-delete-dialog.component'
 })
 export class PlateauComponent implements OnInit, OnDestroy {
   plateaus?: IPlateau[];
+  currentAccount: Account | null = null;
   eventSubscriber?: Subscription;
   currentSearch: string;
   totalItems = 0;
@@ -29,6 +32,7 @@ export class PlateauComponent implements OnInit, OnDestroy {
   constructor(
     protected plateauService: PlateauService,
     protected activatedRoute: ActivatedRoute,
+    private accountService: AccountService,
     protected dataUtils: JhiDataUtils,
     protected router: Router,
     protected eventManager: JhiEventManager,
@@ -84,6 +88,16 @@ export class PlateauComponent implements OnInit, OnDestroy {
       this.loadPage();
     });
     this.registerChangeInPlateaus();
+    this.activatedRoute.data
+      .pipe(
+        flatMap(
+          () => this.accountService.identity(),
+          (data, account) => {            
+            this.currentAccount = account;
+          }
+        )
+      )
+      .subscribe();
   }
 
   ngOnDestroy(): void {

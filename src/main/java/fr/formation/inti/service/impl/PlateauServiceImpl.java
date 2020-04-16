@@ -1,20 +1,20 @@
 package fr.formation.inti.service.impl;
 
-import fr.formation.inti.service.PlateauService;
-import fr.formation.inti.domain.Plateau;
-import fr.formation.inti.repository.PlateauRepository;
-import fr.formation.inti.repository.search.PlateauSearchRepository;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import fr.formation.inti.domain.Plateau;
+import fr.formation.inti.repository.PlateauRepository;
+import fr.formation.inti.repository.search.PlateauSearchRepository;
+import fr.formation.inti.service.PlateauService;
 
 /**
  * Service Implementation for managing {@link Plateau}.
@@ -61,6 +61,13 @@ public class PlateauServiceImpl implements PlateauService {
         return plateauRepository.findAll(pageable);
     }
 
+    
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Plateau> findByUserIsCurrentUser(Pageable pageable) {
+        log.debug("Request to get all Plateaux");
+        return plateauRepository.findByUserIsCurrentUser(pageable);
+    }
     /**
      * Get all the plateaus with eager load of many-to-many relationships.
      *

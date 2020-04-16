@@ -1,6 +1,7 @@
 package fr.formation.inti.service;
 
 import fr.formation.inti.domain.Plateau;
+import fr.formation.inti.domain.Stade;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -59,4 +60,6 @@ public interface PlateauService {
      * @return the list of entities.
      */
     Page<Plateau> search(String query, Pageable pageable);
+
+	Page<Plateau> findByUserIsCurrentUser(Pageable pageable);
 }
