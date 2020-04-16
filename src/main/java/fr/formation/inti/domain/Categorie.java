@@ -1,6 +1,7 @@
 package fr.formation.inti.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -35,6 +36,10 @@ public class Categorie implements Serializable {
 
     @Column(name = "descrition")
     private String descrition;
+
+    @ManyToOne
+    @JsonIgnoreProperties("categories")
+    private User user;
 
     @ManyToMany(mappedBy = "categories")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -74,6 +79,19 @@ public class Categorie implements Serializable {
 
     public void setDescrition(String descrition) {
         this.descrition = descrition;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Categorie user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Set<Club> getClubs() {

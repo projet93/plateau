@@ -28,6 +28,9 @@
             <column name="ville" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="club_id" type="bigint">
                 <constraints nullable="true" />
             </column>

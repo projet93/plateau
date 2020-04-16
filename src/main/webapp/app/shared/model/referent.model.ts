@@ -1,3 +1,5 @@
+import { IUser } from 'app/core/user/user.model';
+
 export interface IReferent {
   id?: number;
   nom?: string;
@@ -5,6 +7,7 @@ export interface IReferent {
   licence?: string;
   telephone?: string;
   email?: string;
+  user?: IUser;
 }
 
 export class Referent implements IReferent {
@@ -14,6 +17,7 @@ export class Referent implements IReferent {
     public prenom?: string,
     public licence?: string,
     public telephone?: string,
-    public email?: string
+    public email?: string,
+    public user?: IUser
   ) {}
 }

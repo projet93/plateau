@@ -52,4 +52,6 @@ public interface ReferentService {
      * @return the list of entities.
      */
     Page<Referent> search(String query, Pageable pageable);
+
+	Page<Referent> findByUserIsCurrentUser(Pageable pageable);
 }

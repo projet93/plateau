@@ -60,7 +60,18 @@ public class StadeServiceImpl implements StadeService {
         log.debug("Request to get all Stades");
         return stadeRepository.findAll(pageable);
     }
-
+    /**
+     * Get all the stades.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Stade> findByUserIsCurrentUser(Pageable pageable) {
+        log.debug("Request to get all Stades");
+        return stadeRepository.findByUserIsCurrentUser(pageable);
+    }
     /**
      * Get one stade by id.
      *

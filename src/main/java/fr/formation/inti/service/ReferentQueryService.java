@@ -104,6 +104,10 @@ public class ReferentQueryService extends QueryService<Referent> {
             if (criteria.getEmail() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getEmail(), Referent_.email));
             }
+//            if (criteria.getUserId() != null) {
+//                specification = specification.and(buildSpecification(criteria.getUserId(),
+//                    root -> root.join(Referent_.user, JoinType.LEFT).get(User_.id)));
+//            }
         }
         return specification;
     }

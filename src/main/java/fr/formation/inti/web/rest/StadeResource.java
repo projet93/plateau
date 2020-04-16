@@ -1,6 +1,9 @@
 package fr.formation.inti.web.rest;
 
 import fr.formation.inti.domain.Stade;
+import fr.formation.inti.repository.UserRepository;
+import fr.formation.inti.security.AuthoritiesConstants;
+import fr.formation.inti.security.SecurityUtils;
 import fr.formation.inti.service.StadeService;
 import fr.formation.inti.web.rest.errors.BadRequestAlertException;
 
@@ -9,6 +12,7 @@ import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +44,9 @@ public class StadeResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    @Autowired
+    private UserRepository userRepository;
+    
     private final StadeService stadeService;
 
     public StadeResource(StadeService stadeService) {
@@ -58,6 +65,10 @@ public class StadeResource {
         log.debug("REST request to save Stade : {}", stade);
         if (stade.getId() != null) {
             throw new BadRequestAlertException("A new stade cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+            log.debug("No user passed in, using current user: {}", SecurityUtils.getCurrentUserLogin());
+            stade.setUser(userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().orElse(null)).orElse(null));
         }
         Stade result = stadeService.save(stade);
         return ResponseEntity.created(new URI("/api/stades/" + result.getId()))
@@ -95,7 +106,8 @@ public class StadeResource {
     @GetMapping("/stades")
     public ResponseEntity<List<Stade>> getAllStades(Pageable pageable) {
         log.debug("REST request to get a page of Stades");
-        Page<Stade> page = stadeService.findAll(pageable);
+        Page<Stade> page = stadeService.findByUserIsCurrentUser(pageable);
+        
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

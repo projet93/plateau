@@ -2,6 +2,7 @@ package fr.formation.inti.service.impl;
 
 import fr.formation.inti.service.ReferentService;
 import fr.formation.inti.domain.Referent;
+import fr.formation.inti.domain.Stade;
 import fr.formation.inti.repository.ReferentRepository;
 import fr.formation.inti.repository.search.ReferentSearchRepository;
 import org.slf4j.Logger;
@@ -59,6 +60,19 @@ public class ReferentServiceImpl implements ReferentService {
     public Page<Referent> findAll(Pageable pageable) {
         log.debug("Request to get all Referents");
         return referentRepository.findAll(pageable);
+    }
+    
+    /**
+     * Get all the referents.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Page<Referent> findByUserIsCurrentUser(Pageable pageable) {
+        log.debug("Request to get all Referents");
+        return referentRepository.findByUserIsCurrentUser(pageable);
     }
 
     /**

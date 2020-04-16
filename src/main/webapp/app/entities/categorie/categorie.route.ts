@@ -39,7 +39,7 @@ export const categorieRoute: Routes = [
     path: '',
     component: CategorieComponent,
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.ADMIN],
       pageTitle: 'plateauFffApp.categorie.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -51,7 +51,7 @@ export const categorieRoute: Routes = [
       categorie: CategorieResolve
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.ADMIN],
       pageTitle: 'plateauFffApp.categorie.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -63,7 +63,7 @@ export const categorieRoute: Routes = [
       categorie: CategorieResolve
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.ADMIN],
       pageTitle: 'plateauFffApp.categorie.home.title'
     },
     canActivate: [UserRouteAccessService]
@@ -75,7 +75,7 @@ export const categorieRoute: Routes = [
       categorie: CategorieResolve
     },
     data: {
-      authorities: [Authority.USER],
+      authorities: [Authority.ADMIN],
       pageTitle: 'plateauFffApp.categorie.home.title'
     },
     canActivate: [UserRouteAccessService]

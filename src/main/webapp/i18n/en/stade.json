@@ -21,6 +21,7 @@
       "adresse": "Adresse",
       "codePostal": "Code Postal",
       "ville": "Ville",
+      "user": "User",
       "club": "Club"
     }
   }

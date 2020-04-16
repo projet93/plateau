@@ -7,8 +7,12 @@ import { Observable } from 'rxjs';
 
 import { IStade, Stade } from 'app/shared/model/stade.model';
 import { StadeService } from './stade.service';
+import { IUser } from 'app/core/user/user.model';
+import { UserService } from 'app/core/user/user.service';
 import { IClub } from 'app/shared/model/club.model';
 import { ClubService } from 'app/entities/club/club.service';
+
+type SelectableEntity = IUser | IClub;
 
 @Component({
   selector: 'jhi-stade-update',
@@ -16,6 +20,7 @@ import { ClubService } from 'app/entities/club/club.service';
 })
 export class StadeUpdateComponent implements OnInit {
   isSaving = false;
+  users: IUser[] = [];
   clubs: IClub[] = [];
 
   editForm = this.fb.group({
@@ -24,11 +29,13 @@ export class StadeUpdateComponent implements OnInit {
     adresse: [],
     codePostal: [],
     ville: [],
+    user: [],
     club: []
   });
 
   constructor(
     protected stadeService: StadeService,
+    protected userService: UserService,
     protected clubService: ClubService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
@@ -37,6 +44,8 @@ export class StadeUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ stade }) => {
       this.updateForm(stade);
+
+      this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
 
       this.clubService.query().subscribe((res: HttpResponse<IClub[]>) => (this.clubs = res.body || []));
     });
@@ -49,6 +58,7 @@ export class StadeUpdateComponent implements OnInit {
       adresse: stade.adresse,
       codePostal: stade.codePostal,
       ville: stade.ville,
+      user: stade.user,
       club: stade.club
     });
   }
@@ -75,6 +85,7 @@ export class StadeUpdateComponent implements OnInit {
       adresse: this.editForm.get(['adresse'])!.value,
       codePostal: this.editForm.get(['codePostal'])!.value,
       ville: this.editForm.get(['ville'])!.value,
+      user: this.editForm.get(['user'])!.value,
       club: this.editForm.get(['club'])!.value
     };
   }
@@ -95,7 +106,7 @@ export class StadeUpdateComponent implements OnInit {
     this.isSaving = false;
   }
 
-  trackById(index: number, item: IClub): any {
+  trackById(index: number, item: SelectableEntity): any {
     return item.id;
   }
 }

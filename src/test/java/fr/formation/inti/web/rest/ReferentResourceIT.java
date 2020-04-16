@@ -2,6 +2,7 @@ package fr.formation.inti.web.rest;
 
 import fr.formation.inti.PlateauFffApp;
 import fr.formation.inti.domain.Referent;
+import fr.formation.inti.domain.User;
 import fr.formation.inti.repository.ReferentRepository;
 import fr.formation.inti.repository.search.ReferentSearchRepository;
 import fr.formation.inti.service.ReferentService;
@@ -609,6 +610,26 @@ public class ReferentResourceIT {
 
         // Get all the referentList where email does not contain UPDATED_EMAIL
         defaultReferentShouldBeFound("email.doesNotContain=" + UPDATED_EMAIL);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllReferentsByUserIsEqualToSomething() throws Exception {
+        // Initialize the database
+        referentRepository.saveAndFlush(referent);
+        User user = UserResourceIT.createEntity(em);
+        em.persist(user);
+        em.flush();
+        referent.setUser(user);
+        referentRepository.saveAndFlush(referent);
+        Long userId = user.getId();
+
+        // Get all the referentList where user equals to userId
+        defaultReferentShouldBeFound("userId.equals=" + userId);
+
+        // Get all the referentList where user equals to userId + 1
+        defaultReferentShouldNotBeFound("userId.equals=" + (userId + 1));
     }
 
     /**

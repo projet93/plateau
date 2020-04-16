@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 
 import { IReferent, Referent } from 'app/shared/model/referent.model';
 import { ReferentService } from './referent.service';
+import { IUser } from 'app/core/user/user.model';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
   selector: 'jhi-referent-update',
@@ -14,6 +16,7 @@ import { ReferentService } from './referent.service';
 })
 export class ReferentUpdateComponent implements OnInit {
   isSaving = false;
+  users: IUser[] = [];
 
   editForm = this.fb.group({
     id: [],
@@ -21,14 +24,22 @@ export class ReferentUpdateComponent implements OnInit {
     prenom: [],
     licence: [],
     telephone: [],
-    email: []
+    email: [],
+    user: []
   });
 
-  constructor(protected referentService: ReferentService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(
+    protected referentService: ReferentService,
+    protected userService: UserService,
+    protected activatedRoute: ActivatedRoute,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ referent }) => {
       this.updateForm(referent);
+
+      this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
     });
   }
 
@@ -39,7 +50,8 @@ export class ReferentUpdateComponent implements OnInit {
       prenom: referent.prenom,
       licence: referent.licence,
       telephone: referent.telephone,
-      email: referent.email
+      email: referent.email,
+      user: referent.user
     });
   }
 
@@ -65,7 +77,8 @@ export class ReferentUpdateComponent implements OnInit {
       prenom: this.editForm.get(['prenom'])!.value,
       licence: this.editForm.get(['licence'])!.value,
       telephone: this.editForm.get(['telephone'])!.value,
-      email: this.editForm.get(['email'])!.value
+      email: this.editForm.get(['email'])!.value,
+      user: this.editForm.get(['user'])!.value
     };
   }
 
@@ -83,5 +96,9 @@ export class ReferentUpdateComponent implements OnInit {
 
   protected onSaveError(): void {
     this.isSaving = false;
+  }
+
+  trackById(index: number, item: IUser): any {
+    return item.id;
   }
 }

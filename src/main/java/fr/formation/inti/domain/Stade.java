@@ -39,6 +39,10 @@ public class Stade implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("stades")
+    private User user;
+
+    @ManyToOne
+    @JsonIgnoreProperties("stades")
     private Club club;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -100,6 +104,19 @@ public class Stade implements Serializable {
 
     public void setVille(String ville) {
         this.ville = ville;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Stade user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Club getClub() {

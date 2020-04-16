@@ -36,6 +36,8 @@ public class ReferentCriteria implements Serializable, Criteria {
 
     private StringFilter email;
 
+    private LongFilter userId;
+
     public ReferentCriteria() {
     }
 
@@ -46,6 +48,7 @@ public class ReferentCriteria implements Serializable, Criteria {
         this.licence = other.licence == null ? null : other.licence.copy();
         this.telephone = other.telephone == null ? null : other.telephone.copy();
         this.email = other.email == null ? null : other.email.copy();
+        this.userId = other.userId == null ? null : other.userId.copy();
     }
 
     @Override
@@ -101,6 +104,14 @@ public class ReferentCriteria implements Serializable, Criteria {
         this.email = email;
     }
 
+    public LongFilter getUserId() {
+        return userId;
+    }
+
+    public void setUserId(LongFilter userId) {
+        this.userId = userId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -117,7 +128,8 @@ public class ReferentCriteria implements Serializable, Criteria {
             Objects.equals(prenom, that.prenom) &&
             Objects.equals(licence, that.licence) &&
             Objects.equals(telephone, that.telephone) &&
-            Objects.equals(email, that.email);
+            Objects.equals(email, that.email) &&
+            Objects.equals(userId, that.userId);
     }
 
     @Override
@@ -128,7 +140,8 @@ public class ReferentCriteria implements Serializable, Criteria {
         prenom,
         licence,
         telephone,
-        email
+        email,
+        userId
         );
     }
 
@@ -141,6 +154,7 @@ public class ReferentCriteria implements Serializable, Criteria {
                 (licence != null ? "licence=" + licence + ", " : "") +
                 (telephone != null ? "telephone=" + telephone + ", " : "") +
                 (email != null ? "email=" + email + ", " : "") +
+                (userId != null ? "userId=" + userId + ", " : "") +
             "}";
     }
 

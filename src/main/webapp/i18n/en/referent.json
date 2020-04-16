@@ -21,7 +21,8 @@
       "prenom": "Prenom",
       "licence": "Licence",
       "telephone": "Telephone",
-      "email": "Email"
+      "email": "Email",
+      "user": "User"
     }
   }
 }

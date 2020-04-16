@@ -7,6 +7,8 @@ import { Observable } from 'rxjs';
 
 import { ICategorie, Categorie } from 'app/shared/model/categorie.model';
 import { CategorieService } from './categorie.service';
+import { IUser } from 'app/core/user/user.model';
+import { UserService } from 'app/core/user/user.service';
 
 @Component({
   selector: 'jhi-categorie-update',
@@ -14,18 +16,27 @@ import { CategorieService } from './categorie.service';
 })
 export class CategorieUpdateComponent implements OnInit {
   isSaving = false;
+  users: IUser[] = [];
 
   editForm = this.fb.group({
     id: [],
     section: [],
-    descrition: []
+    descrition: [],
+    user: []
   });
 
-  constructor(protected categorieService: CategorieService, protected activatedRoute: ActivatedRoute, private fb: FormBuilder) {}
+  constructor(
+    protected categorieService: CategorieService,
+    protected userService: UserService,
+    protected activatedRoute: ActivatedRoute,
+    private fb: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ categorie }) => {
       this.updateForm(categorie);
+
+      this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
     });
   }
 
@@ -33,7 +44,8 @@ export class CategorieUpdateComponent implements OnInit {
     this.editForm.patchValue({
       id: categorie.id,
       section: categorie.section,
-      descrition: categorie.descrition
+      descrition: categorie.descrition,
+      user: categorie.user
     });
   }
 
@@ -56,7 +68,8 @@ export class CategorieUpdateComponent implements OnInit {
       ...new Categorie(),
       id: this.editForm.get(['id'])!.value,
       section: this.editForm.get(['section'])!.value,
-      descrition: this.editForm.get(['descrition'])!.value
+      descrition: this.editForm.get(['descrition'])!.value,
+      user: this.editForm.get(['user'])!.value
     };
   }
 
@@ -74,5 +87,9 @@ export class CategorieUpdateComponent implements OnInit {
 
   protected onSaveError(): void {
     this.isSaving = false;
+  }
+
+  trackById(index: number, item: IUser): any {
+    return item.id;
   }
 }

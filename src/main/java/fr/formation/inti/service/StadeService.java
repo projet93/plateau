@@ -52,4 +52,6 @@ public interface StadeService {
      * @return the list of entities.
      */
     Page<Stade> search(String query, Pageable pageable);
+
+	Page<Stade> findByUserIsCurrentUser(Pageable pageable);
 }

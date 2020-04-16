@@ -1,6 +1,10 @@
 package fr.formation.inti.web.rest;
 
 import fr.formation.inti.domain.Plateau;
+import fr.formation.inti.domain.enumeration.Statut;
+import fr.formation.inti.repository.UserRepository;
+import fr.formation.inti.security.AuthoritiesConstants;
+import fr.formation.inti.security.SecurityUtils;
 import fr.formation.inti.service.PlateauService;
 import fr.formation.inti.web.rest.errors.BadRequestAlertException;
 import fr.formation.inti.service.dto.PlateauCriteria;
@@ -11,6 +15,7 @@ import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,6 +47,9 @@ public class PlateauResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
+    @Autowired
+    private UserRepository userRepository;
+    
     private final PlateauService plateauService;
 
     private final PlateauQueryService plateauQueryService;
@@ -64,6 +72,11 @@ public class PlateauResource {
         if (plateau.getId() != null) {
             throw new BadRequestAlertException("A new plateau cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if (!SecurityUtils.isCurrentUserInRole(AuthoritiesConstants.ADMIN)) {
+            log.debug("No user passed in, using current user: {}", SecurityUtils.getCurrentUserLogin());
+            plateau.setUser(userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().orElse(null)).orElse(null));
+        }
+        plateau.setStatut(Statut.ENCOURS);
         Plateau result = plateauService.save(plateau);
         return ResponseEntity.created(new URI("/api/plateaus/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

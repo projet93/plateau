@@ -21,6 +21,13 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "stade",
+            "relationshipName": "user",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "club",
             "otherEntityRelationshipName": "stade",
             "relationshipName": "club",
