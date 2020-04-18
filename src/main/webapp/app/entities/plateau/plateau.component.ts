@@ -137,7 +137,7 @@ export class PlateauComponent implements OnInit, OnDestroy {
     return result;
   }
   canSinscrire(plateau: Plateau|any): boolean {
-    if(plateau.statut !== Statut.ENATTENTE){
+    if(plateau.statut !== Statut.ENATTENTE && plateau.valid){
       window.console.log(plateau.statut !== Statut.ENATTENTE);
       return true;
     }
