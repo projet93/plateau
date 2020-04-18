@@ -20,14 +20,14 @@ public interface PlateauRepository extends JpaRepository<Plateau, Long>, JpaSpec
     @Query("select plateau from Plateau plateau where plateau.user.login = ?#{principal.username}")
     List<Plateau> findByUserIsCurrentUser();
 
-    @Query(value = "select distinct plateau from Plateau plateau left join fetch plateau.users",
+    @Query(value = "select distinct plateau from Plateau plateau left join fetch plateau.user",
         countQuery = "select count(distinct plateau) from Plateau plateau")
     Page<Plateau> findAllWithEagerRelationships(Pageable pageable);
 
-    @Query("select distinct plateau from Plateau plateau left join fetch plateau.users")
+    @Query("select distinct plateau from Plateau plateau left join fetch plateau.user")
     List<Plateau> findAllWithEagerRelationships();
 
-    @Query("select plateau from Plateau plateau left join fetch plateau.users where plateau.id =:id")
+    @Query("select plateau from Plateau plateau left join fetch plateau.user where plateau.id =:id")
     Optional<Plateau> findOneWithEagerRelationships(@Param("id") Long id);
 
     @Query("select plateau from Plateau plateau where plateau.valid = true or plateau.user.login = ?#{principal.username}")

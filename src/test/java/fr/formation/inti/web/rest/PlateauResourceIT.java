@@ -988,7 +988,6 @@ public class PlateauResourceIT {
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
         em.flush();
-        plateau.addUser(user);
         plateauRepository.saveAndFlush(plateau);
         Long userId = user.getId();
 

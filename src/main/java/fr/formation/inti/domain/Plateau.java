@@ -70,12 +70,7 @@ public class Plateau implements Serializable {
     @JsonIgnoreProperties("plateaus")
     private User user;
 
-    @ManyToMany
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @JoinTable(name = "plateau_user",
-               joinColumns = @JoinColumn(name = "plateau_id", referencedColumnName = "id"),
-               inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    private Set<User> users = new HashSet<>();
+    
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -242,28 +237,7 @@ public class Plateau implements Serializable {
         this.user = user;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public Plateau users(Set<User> users) {
-        this.users = users;
-        return this;
-    }
-
-    public Plateau addUser(User user) {
-        this.users.add(user);
-        return this;
-    }
-
-    public Plateau removeUser(User user) {
-        this.users.remove(user);
-        return this;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
+   
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
