@@ -40,7 +40,7 @@ entity Plateau {
 }
 
 enum Statut{
-	ENCOURS,COMPLET,CLOTURE
+	ENATTENTE,ENCOURS,COMPLET,CLOTURE
 }
 
 

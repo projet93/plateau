@@ -7,11 +7,12 @@ import { Account } from 'app/core/user/account.model';
 import { JhiEventManager, JhiDataUtils } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AccountService } from 'app/core/auth/account.service';
-import { IPlateau } from 'app/shared/model/plateau.model';
+import { IPlateau, Plateau } from 'app/shared/model/plateau.model';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
 import { PlateauService } from './plateau.service';
 import { PlateauDeleteDialogComponent } from './plateau-delete-dialog.component';
+import { Statut } from 'app/shared/model/enumerations/statut.model';
 
 @Component({
   selector: 'jhi-plateau',
@@ -135,7 +136,14 @@ export class PlateauComponent implements OnInit, OnDestroy {
     }
     return result;
   }
-
+  canSinscrire(plateau: Plateau|any): boolean {
+    if(plateau.statut !== Statut.ENATTENTE){
+      window.console.log(plateau.statut !== Statut.ENATTENTE);
+      return true;
+    }
+      
+    return false;
+  }
   protected onSuccess(data: IPlateau[] | null, headers: HttpHeaders, page: number): void {
     this.totalItems = Number(headers.get('X-Total-Count'));
     this.page = page;
@@ -156,6 +164,6 @@ export class PlateauComponent implements OnInit, OnDestroy {
   }
   
   setActive(plateau: IPlateau, isActivated: boolean): void {
-    this.plateauService.update({ ...plateau, valid: isActivated }).subscribe(() => this.loadPage());
+    this.plateauService.update({ ...plateau, valid: isActivated, statut: Statut.ENCOURS }).subscribe(() => this.loadPage());
   }
 }

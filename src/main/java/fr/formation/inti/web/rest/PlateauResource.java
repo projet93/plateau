@@ -77,7 +77,7 @@ public class PlateauResource {
             log.debug("No user passed in, using current user: {}", SecurityUtils.getCurrentUserLogin());
             plateau.setUser(userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().orElse(null)).orElse(null));
         }
-        plateau.setStatut(Statut.ENCOURS);
+        plateau.setStatut(Statut.ENATTENTE);
         Plateau result = plateauService.save(plateau);
         return ResponseEntity.created(new URI("/api/plateaus/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
