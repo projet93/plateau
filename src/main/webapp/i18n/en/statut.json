@@ -2,6 +2,7 @@
   "plateauFffApp": {
     "Statut": {
       "null": "",
+      "ENATTENTE": "ENATTENTE",
       "ENCOURS": "ENCOURS",
       "COMPLET": "COMPLET",
       "CLOTURE": "CLOTURE"

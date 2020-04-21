@@ -1,18 +1,14 @@
 package fr.formation.inti.web.rest;
 
-import fr.formation.inti.domain.Club;
-import fr.formation.inti.domain.User;
-import fr.formation.inti.repository.AuthorityRepository;
-import fr.formation.inti.security.AuthoritiesConstants;
-import fr.formation.inti.service.ClubService;
-import fr.formation.inti.service.MailService;
-import fr.formation.inti.service.UserService;
-import fr.formation.inti.service.dto.UserDTO;
-import fr.formation.inti.web.rest.errors.BadRequestAlertException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,21 +16,30 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import fr.formation.inti.domain.Club;
+import fr.formation.inti.domain.Stade;
+import fr.formation.inti.domain.User;
+import fr.formation.inti.security.AuthoritiesConstants;
+import fr.formation.inti.service.ClubService;
+import fr.formation.inti.service.MailService;
+import fr.formation.inti.service.UserService;
+import fr.formation.inti.service.dto.UserDTO;
+import fr.formation.inti.web.rest.errors.BadRequestAlertException;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link fr.formation.inti.domain.Club}.
@@ -51,12 +56,12 @@ public class ClubResource {
     private String applicationName;
 
     private final ClubService clubService;
-    
+
     @Autowired
     private UserService userService;
     @Autowired
     private MailService mailService;
-
+    
     public ClubResource(ClubService clubService) {
         this.clubService = clubService;
     }
@@ -89,6 +94,8 @@ public class ClubResource {
         User user = userService.registerUser(userDto, "123456");
         mailService.sendActivationEmail(user);
         
+        result.setUser(user);
+        updateClub(result);
         return ResponseEntity.created(new URI("/api/clubs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -131,6 +138,8 @@ public class ClubResource {
         } else {
             page = clubService.findAll(pageable);
         }
+        
+//        Page<Club> page = clubService.findByUserIsCurrentUser(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -147,7 +156,14 @@ public class ClubResource {
         Optional<Club> club = clubService.findOne(id);
         return ResponseUtil.wrapOrNotFound(club);
     }
-
+    
+    
+    @GetMapping("/clubs/user/{id}")
+    public ResponseEntity<Club> getClubByUser(@PathVariable Long id) {
+        log.debug("REST request to get Club : {}", id);
+        Optional<Club> club = clubService.findByUser(id);
+        return ResponseUtil.wrapOrNotFound(club);
+    }
     /**
      * {@code DELETE  /clubs/:id} : delete the "id" club.
      *

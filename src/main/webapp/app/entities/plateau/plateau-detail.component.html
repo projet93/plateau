@@ -31,13 +31,9 @@
                         {{ plateau.programmeContentType }}, {{ byteSize(plateau.programme) }}
                     </div>
                 </dd>
-                <dt><span jhiTranslate="plateauFffApp.plateau.adresse">Adresse</span></dt>
+                <dt><span jhiTranslate="plateauFffApp.plateau.nombreEquipeMax">Nbr Equipe Max</span></dt>
                 <dd>
-                    <span>{{ plateau.adresse }}</span>
-                </dd>
-                <dt><span jhiTranslate="plateauFffApp.plateau.nbrEquipe">Nbr Equipe</span></dt>
-                <dd>
-                    <span>{{ plateau.nbrEquipe }}</span>
+                    <span>{{ plateau.nombreEquipeMax }}</span>
                 </dd>
                 <dt><span jhiTranslate="plateauFffApp.plateau.statut">Statut</span></dt>
                 <dd>
@@ -55,7 +51,13 @@
                 </dd>
                 <dt><span jhiTranslate="plateauFffApp.plateau.user">User</span></dt>
                 <dd>
-                    {{ plateau.user?.login }}
+                    {{ plateau.user?.id }}
+                </dd>
+                <dt><span jhiTranslate="plateauFffApp.plateau.stade">Stade</span></dt>
+                <dd>
+                    <div *ngIf="plateau.stade">
+                        <a [routerLink]="['/stade', plateau.stade?.id, 'view']">{{ plateau.stade?.nom }}</a>
+                    </div>
                 </dd>
             </dl>
 

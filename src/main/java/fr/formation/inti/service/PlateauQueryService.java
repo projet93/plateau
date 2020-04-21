@@ -101,11 +101,8 @@ public class PlateauQueryService extends QueryService<Plateau> {
             if (criteria.getHeureFin() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getHeureFin(), Plateau_.heureFin));
             }
-            if (criteria.getAdresse() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getAdresse(), Plateau_.adresse));
-            }
-            if (criteria.getNbrEquipe() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getNbrEquipe(), Plateau_.nbrEquipe));
+            if (criteria.getNombreEquipeMax() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getNombreEquipeMax(), Plateau_.nombreEquipeMax));
             }
             if (criteria.getStatut() != null) {
                 specification = specification.and(buildSpecification(criteria.getStatut(), Plateau_.statut));
@@ -121,9 +118,9 @@ public class PlateauQueryService extends QueryService<Plateau> {
                 specification = specification.and(buildSpecification(criteria.getUserId(),
                     root -> root.join(Plateau_.user, JoinType.LEFT).get(User_.id)));
             }
-            if (criteria.getUserId() != null) {
-                specification = specification.and(buildSpecification(criteria.getUserId(),
-                    root -> root.join(Plateau_.users, JoinType.LEFT).get(User_.id)));
+            if (criteria.getStadeId() != null) {
+                specification = specification.and(buildSpecification(criteria.getStadeId(),
+                    root -> root.join(Plateau_.stade, JoinType.LEFT).get(Stade_.id)));
             }
         }
         return specification;

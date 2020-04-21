@@ -13,8 +13,10 @@ import { IReferent } from 'app/shared/model/referent.model';
 import { ReferentService } from 'app/entities/referent/referent.service';
 import { IUser } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
+import { IStade } from 'app/shared/model/stade.model';
+import { StadeService } from 'app/entities/stade/stade.service';
 
-type SelectableEntity = IReferent | IUser;
+type SelectableEntity = IReferent | IUser | IStade;
 
 @Component({
   selector: 'jhi-plateau-update',
@@ -24,23 +26,24 @@ export class PlateauUpdateComponent implements OnInit {
   isSaving = false;
   referents: IReferent[] = [];
   users: IUser[] = [];
+  stades: IStade[] = [];
   dateDebutDp: any;
   dateFinDp: any;
 
   editForm = this.fb.group({
     id: [],
-    dateDebut: [],
+    dateDebut: [null, [Validators.required]],
     dateFin: [],
     heureDebut: [],
     heureFin: [],
     programme: [],
     programmeContentType: [],
-    adresse: [],
-    nbrEquipe: [],
+    nombreEquipeMax: [],
     statut: [],
     valid: [],
     referent: [],
-    user: []
+    user: [],
+    stade: []
   });
 
   constructor(
@@ -49,6 +52,7 @@ export class PlateauUpdateComponent implements OnInit {
     protected plateauService: PlateauService,
     protected referentService: ReferentService,
     protected userService: UserService,
+    protected stadeService: StadeService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -60,6 +64,8 @@ export class PlateauUpdateComponent implements OnInit {
       this.referentService.query().subscribe((res: HttpResponse<IReferent[]>) => (this.referents = res.body || []));
 
       this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
+
+      this.stadeService.query().subscribe((res: HttpResponse<IStade[]>) => (this.stades = res.body || []));
     });
   }
 
@@ -72,12 +78,12 @@ export class PlateauUpdateComponent implements OnInit {
       heureFin: plateau.heureFin,
       programme: plateau.programme,
       programmeContentType: plateau.programmeContentType,
-      adresse: plateau.adresse,
-      nbrEquipe: plateau.nbrEquipe,
+      nombreEquipeMax: plateau.nombreEquipeMax,
       statut: plateau.statut,
       valid: plateau.valid,
       referent: plateau.referent,
-      user: plateau.user
+      user: plateau.user,
+      stade: plateau.stade
     });
   }
 
@@ -121,12 +127,12 @@ export class PlateauUpdateComponent implements OnInit {
       heureFin: this.editForm.get(['heureFin'])!.value,
       programmeContentType: this.editForm.get(['programmeContentType'])!.value,
       programme: this.editForm.get(['programme'])!.value,
-      adresse: this.editForm.get(['adresse'])!.value,
-      nbrEquipe: this.editForm.get(['nbrEquipe'])!.value,
+      nombreEquipeMax: this.editForm.get(['nombreEquipeMax'])!.value,
       statut: this.editForm.get(['statut'])!.value,
       valid: this.editForm.get(['valid'])!.value,
       referent: this.editForm.get(['referent'])!.value,
-      user: this.editForm.get(['user'])!.value
+      user: this.editForm.get(['user'])!.value,
+      stade: this.editForm.get(['stade'])!.value
     };
   }
 

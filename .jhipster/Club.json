@@ -23,7 +23,10 @@
         },
         {
             "fieldName": "email",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
         }
     ],
     "relationships": [
@@ -32,6 +35,13 @@
             "otherEntityName": "stade",
             "otherEntityRelationshipName": "club",
             "relationshipName": "stade"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "user",
+            "otherEntityRelationshipName": "club",
+            "relationshipName": "user",
+            "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-many",

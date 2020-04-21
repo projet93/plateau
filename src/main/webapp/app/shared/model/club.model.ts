@@ -1,4 +1,5 @@
 import { IStade } from 'app/shared/model/stade.model';
+import { IUser } from 'app/core/user/user.model';
 import { ICategorie } from 'app/shared/model/categorie.model';
 
 export interface IClub {
@@ -10,6 +11,7 @@ export interface IClub {
   telephone?: string;
   email?: string;
   stades?: IStade[];
+  user?: IUser;
   categories?: ICategorie[];
 }
 
@@ -23,6 +25,7 @@ export class Club implements IClub {
     public telephone?: string,
     public email?: string,
     public stades?: IStade[],
+    public user?: IUser,
     public categories?: ICategorie[]
   ) {}
 }

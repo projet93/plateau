@@ -55,6 +55,9 @@ public class CacheConfiguration {
             createCache(cm, fr.formation.inti.domain.Stade.class.getName() + ".users");
             createCache(cm, fr.formation.inti.domain.Categorie.class.getName() + ".users");
             createCache(cm, fr.formation.inti.domain.Referent.class.getName() + ".users");
+            createCache(cm, fr.formation.inti.domain.Inscription.class.getName());
+            createCache(cm, fr.formation.inti.domain.Plateau.class.getName() + ".stades");
+            createCache(cm, fr.formation.inti.domain.Stade.class.getName() + ".plateaus");
             // jhipster-needle-ehcache-add-entry
         };
     }

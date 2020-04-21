@@ -1,5 +1,6 @@
 package fr.formation.inti.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -44,12 +45,17 @@ public class Club implements Serializable {
     @Column(name = "telephone")
     private String telephone;
 
-    @Column(name = "email")
+    @NotNull
+    @Column(name = "email", nullable = false)
     private String email;
 
     @OneToMany(mappedBy = "club")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<Stade> stades = new HashSet<>();
+
+    @ManyToOne
+    @JsonIgnoreProperties("clubs")
+    private User user;
 
     @ManyToMany
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -168,6 +174,19 @@ public class Club implements Serializable {
 
     public void setStades(Set<Stade> stades) {
         this.stades = stades;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public Club user(User user) {
+        this.user = user;
+        return this;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Set<Categorie> getCategories() {

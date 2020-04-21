@@ -14,6 +14,8 @@ export class ClubService {
   public resourceUrl = SERVER_API_URL + 'api/clubs';
   public resourceSearchUrl = SERVER_API_URL + 'api/_search/clubs';
 
+  public resourceUrlUser = SERVER_API_URL + 'api/clubs/user';
+  
   constructor(protected http: HttpClient) {}
 
   create(club: IClub): Observable<EntityResponseType> {
@@ -28,6 +30,9 @@ export class ClubService {
     return this.http.get<IClub>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  findByUser(id: number): Observable<EntityResponseType> {
+    return this.http.get<IClub>(`${this.resourceUrlUser}/${id}`, { observe: 'response' });
+  }
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<IClub[]>(this.resourceUrl, { params: options, observe: 'response' });

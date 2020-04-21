@@ -25,19 +25,7 @@ describe('Service Tests', () => {
       httpMock = injector.get(HttpTestingController);
       currentDate = moment();
 
-      elemDefault = new Plateau(
-        0,
-        currentDate,
-        currentDate,
-        'AAAAAAA',
-        'AAAAAAA',
-        'image/png',
-        'AAAAAAA',
-        'AAAAAAA',
-        0,
-        Statut.ENCOURS,
-        false
-      );
+      elemDefault = new Plateau(0, currentDate, currentDate, 'AAAAAAA', 'AAAAAAA', 'image/png', 'AAAAAAA', 0, Statut.ENATTENTE, false);
     });
 
     describe('Service methods', () => {
@@ -90,8 +78,7 @@ describe('Service Tests', () => {
             heureDebut: 'BBBBBB',
             heureFin: 'BBBBBB',
             programme: 'BBBBBB',
-            adresse: 'BBBBBB',
-            nbrEquipe: 1,
+            nombreEquipeMax: 1,
             statut: 'BBBBBB',
             valid: true
           },
@@ -121,8 +108,7 @@ describe('Service Tests', () => {
             heureDebut: 'BBBBBB',
             heureFin: 'BBBBBB',
             programme: 'BBBBBB',
-            adresse: 'BBBBBB',
-            nbrEquipe: 1,
+            nombreEquipeMax: 1,
             statut: 'BBBBBB',
             valid: true
           },

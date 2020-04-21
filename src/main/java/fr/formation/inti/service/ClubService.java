@@ -59,4 +59,8 @@ public interface ClubService {
      * @return the list of entities.
      */
     Page<Club> search(String query, Pageable pageable);
+
+	Page<Club> findByUserIsCurrentUser(Pageable pageable);
+
+	Optional<Club> findByUser(Long id);
 }

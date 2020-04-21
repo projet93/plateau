@@ -63,16 +63,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="plateauFffApp.plateau.adresse" for="field_adresse">Adresse</label>
-                    <input type="text" class="form-control" name="adresse" id="field_adresse"
-                           formControlName="adresse"/>
+                    <label class="form-control-label" jhiTranslate="plateauFffApp.plateau.nombreEquipeMax" for="field_nombreEquipeMax">Nbr Equipe Max</label>
+                    <input type="number" class="form-control" name="nombreEquipeMax" id="field_nombreEquipeMax"
+                           formControlName="nombreEquipeMax"/>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="plateauFffApp.plateau.nbrEquipe" for="field_nbrEquipe">Nbr Equipe</label>
-                    <input type="number" class="form-control" name="nbrEquipe" id="field_nbrEquipe"
-                           formControlName="nbrEquipe"/>
-                </div>
+                             
 
                 <div class="form-group">
                     <label class="form-control-label" jhiTranslate="plateauFffApp.plateau.referent" for="field_referent">Referent</label>
@@ -81,7 +77,16 @@
                         <option [ngValue]="referentOption.id === editForm.get('referent')!.value?.id ? editForm.get('referent')!.value : referentOption" *ngFor="let referentOption of referents; trackBy: trackById">{{ referentOption.nom }}</option>
                     </select>
                 </div>
+
                 
+
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="plateauFffApp.plateau.stade" for="field_stade">Stade</label>
+                    <select class="form-control" id="field_stade" name="stade" formControlName="stade">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="stadeOption.id === editForm.get('stade')!.value?.id ? editForm.get('stade')!.value : stadeOption" *ngFor="let stadeOption of stades; trackBy: trackById">{{ stadeOption.nom }}</option>
+                    </select>
+                </div>
             </div>
 
             <div>

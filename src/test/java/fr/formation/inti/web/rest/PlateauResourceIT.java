@@ -1,33 +1,20 @@
 package fr.formation.inti.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.persistence.EntityManager;
+import fr.formation.inti.PlateauFffApp;
+import fr.formation.inti.domain.Plateau;
+import fr.formation.inti.domain.Referent;
+import fr.formation.inti.domain.User;
+import fr.formation.inti.domain.Stade;
+import fr.formation.inti.repository.PlateauRepository;
+import fr.formation.inti.repository.search.PlateauSearchRepository;
+import fr.formation.inti.service.PlateauService;
+import fr.formation.inti.service.dto.PlateauCriteria;
+import fr.formation.inti.service.PlateauQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -39,16 +26,20 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
+import javax.persistence.EntityManager;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Collections;
+import java.util.List;
 
-import fr.formation.inti.PlateauFffApp;
-import fr.formation.inti.domain.Plateau;
-import fr.formation.inti.domain.Referent;
-import fr.formation.inti.domain.User;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import fr.formation.inti.domain.enumeration.Statut;
-import fr.formation.inti.repository.PlateauRepository;
-import fr.formation.inti.repository.search.PlateauSearchRepository;
-import fr.formation.inti.service.PlateauQueryService;
-import fr.formation.inti.service.PlateauService;
 /**
  * Integration tests for the {@link PlateauResource} REST controller.
  */
@@ -77,27 +68,18 @@ public class PlateauResourceIT {
     private static final String DEFAULT_PROGRAMME_CONTENT_TYPE = "image/jpg";
     private static final String UPDATED_PROGRAMME_CONTENT_TYPE = "image/png";
 
-    private static final String DEFAULT_ADRESSE = "AAAAAAAAAA";
-    private static final String UPDATED_ADRESSE = "BBBBBBBBBB";
+    private static final Integer DEFAULT_NOMBRE_EQUIPE_MAX = 1;
+    private static final Integer UPDATED_NOMBRE_EQUIPE_MAX = 2;
+    private static final Integer SMALLER_NOMBRE_EQUIPE_MAX = 1 - 1;
 
-    private static final Integer DEFAULT_NBR_EQUIPE = 1;
-    private static final Integer UPDATED_NBR_EQUIPE = 2;
-    private static final Integer SMALLER_NBR_EQUIPE = 1 - 1;
-
-    private static final Statut DEFAULT_STATUT = Statut.ENCOURS;
-    private static final Statut UPDATED_STATUT = Statut.COMPLET;
+    private static final Statut DEFAULT_STATUT = Statut.ENATTENTE;
+    private static final Statut UPDATED_STATUT = Statut.ENCOURS;
 
     private static final Boolean DEFAULT_VALID = false;
     private static final Boolean UPDATED_VALID = true;
 
     @Autowired
     private PlateauRepository plateauRepository;
-
-    @Mock
-    private PlateauRepository plateauRepositoryMock;
-
-    @Mock
-    private PlateauService plateauServiceMock;
 
     @Autowired
     private PlateauService plateauService;
@@ -135,8 +117,7 @@ public class PlateauResourceIT {
             .heureFin(DEFAULT_HEURE_FIN)
             .programme(DEFAULT_PROGRAMME)
             .programmeContentType(DEFAULT_PROGRAMME_CONTENT_TYPE)
-            .adresse(DEFAULT_ADRESSE)
-            .nbrEquipe(DEFAULT_NBR_EQUIPE)
+            .nombreEquipeMax(DEFAULT_NOMBRE_EQUIPE_MAX)
             .statut(DEFAULT_STATUT)
             .valid(DEFAULT_VALID);
         return plateau;
@@ -155,8 +136,7 @@ public class PlateauResourceIT {
             .heureFin(UPDATED_HEURE_FIN)
             .programme(UPDATED_PROGRAMME)
             .programmeContentType(UPDATED_PROGRAMME_CONTENT_TYPE)
-            .adresse(UPDATED_ADRESSE)
-            .nbrEquipe(UPDATED_NBR_EQUIPE)
+            .nombreEquipeMax(UPDATED_NOMBRE_EQUIPE_MAX)
             .statut(UPDATED_STATUT)
             .valid(UPDATED_VALID);
         return plateau;
@@ -188,8 +168,7 @@ public class PlateauResourceIT {
         assertThat(testPlateau.getHeureFin()).isEqualTo(DEFAULT_HEURE_FIN);
         assertThat(testPlateau.getProgramme()).isEqualTo(DEFAULT_PROGRAMME);
         assertThat(testPlateau.getProgrammeContentType()).isEqualTo(DEFAULT_PROGRAMME_CONTENT_TYPE);
-        assertThat(testPlateau.getAdresse()).isEqualTo(DEFAULT_ADRESSE);
-        assertThat(testPlateau.getNbrEquipe()).isEqualTo(DEFAULT_NBR_EQUIPE);
+        assertThat(testPlateau.getNombreEquipeMax()).isEqualTo(DEFAULT_NOMBRE_EQUIPE_MAX);
         assertThat(testPlateau.getStatut()).isEqualTo(DEFAULT_STATUT);
         assertThat(testPlateau.isValid()).isEqualTo(DEFAULT_VALID);
 
@@ -222,6 +201,24 @@ public class PlateauResourceIT {
 
     @Test
     @Transactional
+    public void checkDateDebutIsRequired() throws Exception {
+        int databaseSizeBeforeTest = plateauRepository.findAll().size();
+        // set the field null
+        plateau.setDateDebut(null);
+
+        // Create the Plateau, which fails.
+
+        restPlateauMockMvc.perform(post("/api/plateaus")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(plateau)))
+            .andExpect(status().isBadRequest());
+
+        List<Plateau> plateauList = plateauRepository.findAll();
+        assertThat(plateauList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllPlateaus() throws Exception {
         // Initialize the database
         plateauRepository.saveAndFlush(plateau);
@@ -237,32 +234,11 @@ public class PlateauResourceIT {
             .andExpect(jsonPath("$.[*].heureFin").value(hasItem(DEFAULT_HEURE_FIN)))
             .andExpect(jsonPath("$.[*].programmeContentType").value(hasItem(DEFAULT_PROGRAMME_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].programme").value(hasItem(Base64Utils.encodeToString(DEFAULT_PROGRAMME))))
-            .andExpect(jsonPath("$.[*].adresse").value(hasItem(DEFAULT_ADRESSE)))
-            .andExpect(jsonPath("$.[*].nbrEquipe").value(hasItem(DEFAULT_NBR_EQUIPE)))
+            .andExpect(jsonPath("$.[*].nombreEquipeMax").value(hasItem(DEFAULT_NOMBRE_EQUIPE_MAX)))
             .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())))
             .andExpect(jsonPath("$.[*].valid").value(hasItem(DEFAULT_VALID.booleanValue())));
     }
     
-    @SuppressWarnings({"unchecked"})
-    public void getAllPlateausWithEagerRelationshipsIsEnabled() throws Exception {
-        when(plateauServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        restPlateauMockMvc.perform(get("/api/plateaus?eagerload=true"))
-            .andExpect(status().isOk());
-
-        verify(plateauServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
-    @SuppressWarnings({"unchecked"})
-    public void getAllPlateausWithEagerRelationshipsIsNotEnabled() throws Exception {
-        when(plateauServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
-
-        restPlateauMockMvc.perform(get("/api/plateaus?eagerload=true"))
-            .andExpect(status().isOk());
-
-        verify(plateauServiceMock, times(1)).findAllWithEagerRelationships(any());
-    }
-
     @Test
     @Transactional
     public void getPlateau() throws Exception {
@@ -280,8 +256,7 @@ public class PlateauResourceIT {
             .andExpect(jsonPath("$.heureFin").value(DEFAULT_HEURE_FIN))
             .andExpect(jsonPath("$.programmeContentType").value(DEFAULT_PROGRAMME_CONTENT_TYPE))
             .andExpect(jsonPath("$.programme").value(Base64Utils.encodeToString(DEFAULT_PROGRAMME)))
-            .andExpect(jsonPath("$.adresse").value(DEFAULT_ADRESSE))
-            .andExpect(jsonPath("$.nbrEquipe").value(DEFAULT_NBR_EQUIPE))
+            .andExpect(jsonPath("$.nombreEquipeMax").value(DEFAULT_NOMBRE_EQUIPE_MAX))
             .andExpect(jsonPath("$.statut").value(DEFAULT_STATUT.toString()))
             .andExpect(jsonPath("$.valid").value(DEFAULT_VALID.booleanValue()));
     }
@@ -674,184 +649,106 @@ public class PlateauResourceIT {
 
     @Test
     @Transactional
-    public void getAllPlateausByAdresseIsEqualToSomething() throws Exception {
+    public void getAllPlateausByNombreEquipeMaxIsEqualToSomething() throws Exception {
         // Initialize the database
         plateauRepository.saveAndFlush(plateau);
 
-        // Get all the plateauList where adresse equals to DEFAULT_ADRESSE
-        defaultPlateauShouldBeFound("adresse.equals=" + DEFAULT_ADRESSE);
+        // Get all the plateauList where nombreEquipeMax equals to DEFAULT_NOMBRE_EQUIPE_MAX
+        defaultPlateauShouldBeFound("nombreEquipeMax.equals=" + DEFAULT_NOMBRE_EQUIPE_MAX);
 
-        // Get all the plateauList where adresse equals to UPDATED_ADRESSE
-        defaultPlateauShouldNotBeFound("adresse.equals=" + UPDATED_ADRESSE);
+        // Get all the plateauList where nombreEquipeMax equals to UPDATED_NOMBRE_EQUIPE_MAX
+        defaultPlateauShouldNotBeFound("nombreEquipeMax.equals=" + UPDATED_NOMBRE_EQUIPE_MAX);
     }
 
     @Test
     @Transactional
-    public void getAllPlateausByAdresseIsNotEqualToSomething() throws Exception {
+    public void getAllPlateausByNombreEquipeMaxIsNotEqualToSomething() throws Exception {
         // Initialize the database
         plateauRepository.saveAndFlush(plateau);
 
-        // Get all the plateauList where adresse not equals to DEFAULT_ADRESSE
-        defaultPlateauShouldNotBeFound("adresse.notEquals=" + DEFAULT_ADRESSE);
+        // Get all the plateauList where nombreEquipeMax not equals to DEFAULT_NOMBRE_EQUIPE_MAX
+        defaultPlateauShouldNotBeFound("nombreEquipeMax.notEquals=" + DEFAULT_NOMBRE_EQUIPE_MAX);
 
-        // Get all the plateauList where adresse not equals to UPDATED_ADRESSE
-        defaultPlateauShouldBeFound("adresse.notEquals=" + UPDATED_ADRESSE);
+        // Get all the plateauList where nombreEquipeMax not equals to UPDATED_NOMBRE_EQUIPE_MAX
+        defaultPlateauShouldBeFound("nombreEquipeMax.notEquals=" + UPDATED_NOMBRE_EQUIPE_MAX);
     }
 
     @Test
     @Transactional
-    public void getAllPlateausByAdresseIsInShouldWork() throws Exception {
+    public void getAllPlateausByNombreEquipeMaxIsInShouldWork() throws Exception {
         // Initialize the database
         plateauRepository.saveAndFlush(plateau);
 
-        // Get all the plateauList where adresse in DEFAULT_ADRESSE or UPDATED_ADRESSE
-        defaultPlateauShouldBeFound("adresse.in=" + DEFAULT_ADRESSE + "," + UPDATED_ADRESSE);
+        // Get all the plateauList where nombreEquipeMax in DEFAULT_NOMBRE_EQUIPE_MAX or UPDATED_NOMBRE_EQUIPE_MAX
+        defaultPlateauShouldBeFound("nombreEquipeMax.in=" + DEFAULT_NOMBRE_EQUIPE_MAX + "," + UPDATED_NOMBRE_EQUIPE_MAX);
 
-        // Get all the plateauList where adresse equals to UPDATED_ADRESSE
-        defaultPlateauShouldNotBeFound("adresse.in=" + UPDATED_ADRESSE);
+        // Get all the plateauList where nombreEquipeMax equals to UPDATED_NOMBRE_EQUIPE_MAX
+        defaultPlateauShouldNotBeFound("nombreEquipeMax.in=" + UPDATED_NOMBRE_EQUIPE_MAX);
     }
 
     @Test
     @Transactional
-    public void getAllPlateausByAdresseIsNullOrNotNull() throws Exception {
+    public void getAllPlateausByNombreEquipeMaxIsNullOrNotNull() throws Exception {
         // Initialize the database
         plateauRepository.saveAndFlush(plateau);
 
-        // Get all the plateauList where adresse is not null
-        defaultPlateauShouldBeFound("adresse.specified=true");
+        // Get all the plateauList where nombreEquipeMax is not null
+        defaultPlateauShouldBeFound("nombreEquipeMax.specified=true");
 
-        // Get all the plateauList where adresse is null
-        defaultPlateauShouldNotBeFound("adresse.specified=false");
-    }
-                @Test
-    @Transactional
-    public void getAllPlateausByAdresseContainsSomething() throws Exception {
-        // Initialize the database
-        plateauRepository.saveAndFlush(plateau);
-
-        // Get all the plateauList where adresse contains DEFAULT_ADRESSE
-        defaultPlateauShouldBeFound("adresse.contains=" + DEFAULT_ADRESSE);
-
-        // Get all the plateauList where adresse contains UPDATED_ADRESSE
-        defaultPlateauShouldNotBeFound("adresse.contains=" + UPDATED_ADRESSE);
+        // Get all the plateauList where nombreEquipeMax is null
+        defaultPlateauShouldNotBeFound("nombreEquipeMax.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllPlateausByAdresseNotContainsSomething() throws Exception {
+    public void getAllPlateausByNombreEquipeMaxIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         plateauRepository.saveAndFlush(plateau);
 
-        // Get all the plateauList where adresse does not contain DEFAULT_ADRESSE
-        defaultPlateauShouldNotBeFound("adresse.doesNotContain=" + DEFAULT_ADRESSE);
+        // Get all the plateauList where nombreEquipeMax is greater than or equal to DEFAULT_NOMBRE_EQUIPE_MAX
+        defaultPlateauShouldBeFound("nombreEquipeMax.greaterThanOrEqual=" + DEFAULT_NOMBRE_EQUIPE_MAX);
 
-        // Get all the plateauList where adresse does not contain UPDATED_ADRESSE
-        defaultPlateauShouldBeFound("adresse.doesNotContain=" + UPDATED_ADRESSE);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllPlateausByNbrEquipeIsEqualToSomething() throws Exception {
-        // Initialize the database
-        plateauRepository.saveAndFlush(plateau);
-
-        // Get all the plateauList where nbrEquipe equals to DEFAULT_NBR_EQUIPE
-        defaultPlateauShouldBeFound("nbrEquipe.equals=" + DEFAULT_NBR_EQUIPE);
-
-        // Get all the plateauList where nbrEquipe equals to UPDATED_NBR_EQUIPE
-        defaultPlateauShouldNotBeFound("nbrEquipe.equals=" + UPDATED_NBR_EQUIPE);
+        // Get all the plateauList where nombreEquipeMax is greater than or equal to UPDATED_NOMBRE_EQUIPE_MAX
+        defaultPlateauShouldNotBeFound("nombreEquipeMax.greaterThanOrEqual=" + UPDATED_NOMBRE_EQUIPE_MAX);
     }
 
     @Test
     @Transactional
-    public void getAllPlateausByNbrEquipeIsNotEqualToSomething() throws Exception {
+    public void getAllPlateausByNombreEquipeMaxIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         plateauRepository.saveAndFlush(plateau);
 
-        // Get all the plateauList where nbrEquipe not equals to DEFAULT_NBR_EQUIPE
-        defaultPlateauShouldNotBeFound("nbrEquipe.notEquals=" + DEFAULT_NBR_EQUIPE);
+        // Get all the plateauList where nombreEquipeMax is less than or equal to DEFAULT_NOMBRE_EQUIPE_MAX
+        defaultPlateauShouldBeFound("nombreEquipeMax.lessThanOrEqual=" + DEFAULT_NOMBRE_EQUIPE_MAX);
 
-        // Get all the plateauList where nbrEquipe not equals to UPDATED_NBR_EQUIPE
-        defaultPlateauShouldBeFound("nbrEquipe.notEquals=" + UPDATED_NBR_EQUIPE);
+        // Get all the plateauList where nombreEquipeMax is less than or equal to SMALLER_NOMBRE_EQUIPE_MAX
+        defaultPlateauShouldNotBeFound("nombreEquipeMax.lessThanOrEqual=" + SMALLER_NOMBRE_EQUIPE_MAX);
     }
 
     @Test
     @Transactional
-    public void getAllPlateausByNbrEquipeIsInShouldWork() throws Exception {
+    public void getAllPlateausByNombreEquipeMaxIsLessThanSomething() throws Exception {
         // Initialize the database
         plateauRepository.saveAndFlush(plateau);
 
-        // Get all the plateauList where nbrEquipe in DEFAULT_NBR_EQUIPE or UPDATED_NBR_EQUIPE
-        defaultPlateauShouldBeFound("nbrEquipe.in=" + DEFAULT_NBR_EQUIPE + "," + UPDATED_NBR_EQUIPE);
+        // Get all the plateauList where nombreEquipeMax is less than DEFAULT_NOMBRE_EQUIPE_MAX
+        defaultPlateauShouldNotBeFound("nombreEquipeMax.lessThan=" + DEFAULT_NOMBRE_EQUIPE_MAX);
 
-        // Get all the plateauList where nbrEquipe equals to UPDATED_NBR_EQUIPE
-        defaultPlateauShouldNotBeFound("nbrEquipe.in=" + UPDATED_NBR_EQUIPE);
+        // Get all the plateauList where nombreEquipeMax is less than UPDATED_NOMBRE_EQUIPE_MAX
+        defaultPlateauShouldBeFound("nombreEquipeMax.lessThan=" + UPDATED_NOMBRE_EQUIPE_MAX);
     }
 
     @Test
     @Transactional
-    public void getAllPlateausByNbrEquipeIsNullOrNotNull() throws Exception {
+    public void getAllPlateausByNombreEquipeMaxIsGreaterThanSomething() throws Exception {
         // Initialize the database
         plateauRepository.saveAndFlush(plateau);
 
-        // Get all the plateauList where nbrEquipe is not null
-        defaultPlateauShouldBeFound("nbrEquipe.specified=true");
+        // Get all the plateauList where nombreEquipeMax is greater than DEFAULT_NOMBRE_EQUIPE_MAX
+        defaultPlateauShouldNotBeFound("nombreEquipeMax.greaterThan=" + DEFAULT_NOMBRE_EQUIPE_MAX);
 
-        // Get all the plateauList where nbrEquipe is null
-        defaultPlateauShouldNotBeFound("nbrEquipe.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllPlateausByNbrEquipeIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        plateauRepository.saveAndFlush(plateau);
-
-        // Get all the plateauList where nbrEquipe is greater than or equal to DEFAULT_NBR_EQUIPE
-        defaultPlateauShouldBeFound("nbrEquipe.greaterThanOrEqual=" + DEFAULT_NBR_EQUIPE);
-
-        // Get all the plateauList where nbrEquipe is greater than or equal to UPDATED_NBR_EQUIPE
-        defaultPlateauShouldNotBeFound("nbrEquipe.greaterThanOrEqual=" + UPDATED_NBR_EQUIPE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPlateausByNbrEquipeIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        plateauRepository.saveAndFlush(plateau);
-
-        // Get all the plateauList where nbrEquipe is less than or equal to DEFAULT_NBR_EQUIPE
-        defaultPlateauShouldBeFound("nbrEquipe.lessThanOrEqual=" + DEFAULT_NBR_EQUIPE);
-
-        // Get all the plateauList where nbrEquipe is less than or equal to SMALLER_NBR_EQUIPE
-        defaultPlateauShouldNotBeFound("nbrEquipe.lessThanOrEqual=" + SMALLER_NBR_EQUIPE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPlateausByNbrEquipeIsLessThanSomething() throws Exception {
-        // Initialize the database
-        plateauRepository.saveAndFlush(plateau);
-
-        // Get all the plateauList where nbrEquipe is less than DEFAULT_NBR_EQUIPE
-        defaultPlateauShouldNotBeFound("nbrEquipe.lessThan=" + DEFAULT_NBR_EQUIPE);
-
-        // Get all the plateauList where nbrEquipe is less than UPDATED_NBR_EQUIPE
-        defaultPlateauShouldBeFound("nbrEquipe.lessThan=" + UPDATED_NBR_EQUIPE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllPlateausByNbrEquipeIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        plateauRepository.saveAndFlush(plateau);
-
-        // Get all the plateauList where nbrEquipe is greater than DEFAULT_NBR_EQUIPE
-        defaultPlateauShouldNotBeFound("nbrEquipe.greaterThan=" + DEFAULT_NBR_EQUIPE);
-
-        // Get all the plateauList where nbrEquipe is greater than SMALLER_NBR_EQUIPE
-        defaultPlateauShouldBeFound("nbrEquipe.greaterThan=" + SMALLER_NBR_EQUIPE);
+        // Get all the plateauList where nombreEquipeMax is greater than SMALLER_NOMBRE_EQUIPE_MAX
+        defaultPlateauShouldBeFound("nombreEquipeMax.greaterThan=" + SMALLER_NOMBRE_EQUIPE_MAX);
     }
 
 
@@ -979,7 +876,6 @@ public class PlateauResourceIT {
     }
 
 
-    
     @Test
     @Transactional
     public void getAllPlateausByUserIsEqualToSomething() throws Exception {
@@ -988,6 +884,7 @@ public class PlateauResourceIT {
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
         em.flush();
+        plateau.setUser(user);
         plateauRepository.saveAndFlush(plateau);
         Long userId = user.getId();
 
@@ -996,6 +893,26 @@ public class PlateauResourceIT {
 
         // Get all the plateauList where user equals to userId + 1
         defaultPlateauShouldNotBeFound("userId.equals=" + (userId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllPlateausByStadeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        plateauRepository.saveAndFlush(plateau);
+        Stade stade = StadeResourceIT.createEntity(em);
+        em.persist(stade);
+        em.flush();
+        plateau.setStade(stade);
+        plateauRepository.saveAndFlush(plateau);
+        Long stadeId = stade.getId();
+
+        // Get all the plateauList where stade equals to stadeId
+        defaultPlateauShouldBeFound("stadeId.equals=" + stadeId);
+
+        // Get all the plateauList where stade equals to stadeId + 1
+        defaultPlateauShouldNotBeFound("stadeId.equals=" + (stadeId + 1));
     }
 
     /**
@@ -1012,8 +929,7 @@ public class PlateauResourceIT {
             .andExpect(jsonPath("$.[*].heureFin").value(hasItem(DEFAULT_HEURE_FIN)))
             .andExpect(jsonPath("$.[*].programmeContentType").value(hasItem(DEFAULT_PROGRAMME_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].programme").value(hasItem(Base64Utils.encodeToString(DEFAULT_PROGRAMME))))
-            .andExpect(jsonPath("$.[*].adresse").value(hasItem(DEFAULT_ADRESSE)))
-            .andExpect(jsonPath("$.[*].nbrEquipe").value(hasItem(DEFAULT_NBR_EQUIPE)))
+            .andExpect(jsonPath("$.[*].nombreEquipeMax").value(hasItem(DEFAULT_NOMBRE_EQUIPE_MAX)))
             .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())))
             .andExpect(jsonPath("$.[*].valid").value(hasItem(DEFAULT_VALID.booleanValue())));
 
@@ -1071,8 +987,7 @@ public class PlateauResourceIT {
             .heureFin(UPDATED_HEURE_FIN)
             .programme(UPDATED_PROGRAMME)
             .programmeContentType(UPDATED_PROGRAMME_CONTENT_TYPE)
-            .adresse(UPDATED_ADRESSE)
-            .nbrEquipe(UPDATED_NBR_EQUIPE)
+            .nombreEquipeMax(UPDATED_NOMBRE_EQUIPE_MAX)
             .statut(UPDATED_STATUT)
             .valid(UPDATED_VALID);
 
@@ -1091,8 +1006,7 @@ public class PlateauResourceIT {
         assertThat(testPlateau.getHeureFin()).isEqualTo(UPDATED_HEURE_FIN);
         assertThat(testPlateau.getProgramme()).isEqualTo(UPDATED_PROGRAMME);
         assertThat(testPlateau.getProgrammeContentType()).isEqualTo(UPDATED_PROGRAMME_CONTENT_TYPE);
-        assertThat(testPlateau.getAdresse()).isEqualTo(UPDATED_ADRESSE);
-        assertThat(testPlateau.getNbrEquipe()).isEqualTo(UPDATED_NBR_EQUIPE);
+        assertThat(testPlateau.getNombreEquipeMax()).isEqualTo(UPDATED_NOMBRE_EQUIPE_MAX);
         assertThat(testPlateau.getStatut()).isEqualTo(UPDATED_STATUT);
         assertThat(testPlateau.isValid()).isEqualTo(UPDATED_VALID);
 
@@ -1160,8 +1074,7 @@ public class PlateauResourceIT {
             .andExpect(jsonPath("$.[*].heureFin").value(hasItem(DEFAULT_HEURE_FIN)))
             .andExpect(jsonPath("$.[*].programmeContentType").value(hasItem(DEFAULT_PROGRAMME_CONTENT_TYPE)))
             .andExpect(jsonPath("$.[*].programme").value(hasItem(Base64Utils.encodeToString(DEFAULT_PROGRAMME))))
-            .andExpect(jsonPath("$.[*].adresse").value(hasItem(DEFAULT_ADRESSE)))
-            .andExpect(jsonPath("$.[*].nbrEquipe").value(hasItem(DEFAULT_NBR_EQUIPE)))
+            .andExpect(jsonPath("$.[*].nombreEquipeMax").value(hasItem(DEFAULT_NOMBRE_EQUIPE_MAX)))
             .andExpect(jsonPath("$.[*].statut").value(hasItem(DEFAULT_STATUT.toString())))
             .andExpect(jsonPath("$.[*].valid").value(hasItem(DEFAULT_VALID.booleanValue())));
     }

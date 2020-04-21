@@ -25,7 +25,7 @@ export class StadeUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    nom: [],
+    nom: [null, [Validators.required]],
     adresse: [],
     codePostal: [],
     ville: [],

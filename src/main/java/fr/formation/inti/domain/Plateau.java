@@ -5,13 +5,12 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.util.Objects;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
 
 import fr.formation.inti.domain.enumeration.Statut;
 
@@ -30,7 +29,8 @@ public class Plateau implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "date_debut")
+    @NotNull
+    @Column(name = "date_debut", nullable = false)
     private LocalDate dateDebut;
 
     @Column(name = "date_fin")
@@ -49,11 +49,8 @@ public class Plateau implements Serializable {
     @Column(name = "programme_content_type")
     private String programmeContentType;
 
-    @Column(name = "adresse")
-    private String adresse;
-
-    @Column(name = "nbr_equipe")
-    private Integer nbrEquipe;
+    @Column(name = "nombre_equipe_max")
+    private Integer nombreEquipeMax;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "statut")
@@ -70,9 +67,23 @@ public class Plateau implements Serializable {
     @JsonIgnoreProperties("plateaus")
     private User user;
 
-    
+    @ManyToOne
+    @JsonIgnoreProperties("plateaus")
+    private Stade stade;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    @Version
+    @Column(name = "version")
+    private Long version;
+    
+    public Long getVersion() {
+		return version;
+	}
+
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+
+	// jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
@@ -159,30 +170,17 @@ public class Plateau implements Serializable {
         this.programmeContentType = programmeContentType;
     }
 
-    public String getAdresse() {
-        return adresse;
+    public Integer getNombreEquipeMax() {
+        return nombreEquipeMax;
     }
 
-    public Plateau adresse(String adresse) {
-        this.adresse = adresse;
+    public Plateau nombreEquipeMax(Integer nombreEquipeMax) {
+        this.nombreEquipeMax = nombreEquipeMax;
         return this;
     }
 
-    public void setAdresse(String adresse) {
-        this.adresse = adresse;
-    }
-
-    public Integer getNbrEquipe() {
-        return nbrEquipe;
-    }
-
-    public Plateau nbrEquipe(Integer nbrEquipe) {
-        this.nbrEquipe = nbrEquipe;
-        return this;
-    }
-
-    public void setNbrEquipe(Integer nbrEquipe) {
-        this.nbrEquipe = nbrEquipe;
+    public void setNombreEquipeMax(Integer nombreEquipeMax) {
+        this.nombreEquipeMax = nombreEquipeMax;
     }
 
     public Statut getStatut() {
@@ -237,7 +235,18 @@ public class Plateau implements Serializable {
         this.user = user;
     }
 
-   
+    public Stade getStade() {
+        return stade;
+    }
+
+    public Plateau stade(Stade stade) {
+        this.stade = stade;
+        return this;
+    }
+
+    public void setStade(Stade stade) {
+        this.stade = stade;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -266,8 +275,7 @@ public class Plateau implements Serializable {
             ", heureFin='" + getHeureFin() + "'" +
             ", programme='" + getProgramme() + "'" +
             ", programmeContentType='" + getProgrammeContentType() + "'" +
-            ", adresse='" + getAdresse() + "'" +
-            ", nbrEquipe=" + getNbrEquipe() +
+            ", nombreEquipeMax=" + getNombreEquipeMax() +
             ", statut='" + getStatut() + "'" +
             ", valid='" + isValid() + "'" +
             "}";

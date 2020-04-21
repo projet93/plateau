@@ -22,12 +22,12 @@
       "heureDebut": "Heure Debut",
       "heureFin": "Heure Fin",
       "programme": "Programme",
-      "adresse": "Adresse",
-      "nbrEquipe": "Nbr Equipe",
+      "nombreEquipeMax": "Nombre Equipe Max",
       "statut": "Statut",
       "valid": "Valid",
       "referent": "Referent",
-      "user": "User"
+      "user": "User",
+      "stade": "Stade"
     }
   }
 }

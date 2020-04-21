@@ -62,14 +62,12 @@
 					<th scope="col" jhiSortBy="programme"><span
 						jhiTranslate="plateauFffApp.plateau.programme">Programme</span> <fa-icon
 							icon="sort"></fa-icon></th>
-					<th scope="col" jhiSortBy="adresse" ><span
-						jhiTranslate="plateauFffApp.plateau.adresse">Adresse</span> <fa-icon
+					
+					<th scope="col" jhiSortBy="nombreEquipe"><span
+						jhiTranslate="plateauFffApp.plateau.nombreEquipeMax">Nbr Equipe Max</span> <fa-icon
 							icon="sort"></fa-icon></th>
-					<th scope="col" jhiSortBy="nbrEquipe"><span
-						jhiTranslate="plateauFffApp.plateau.nbrEquipeMax">Nbr Equipe Max</span> <fa-icon
-							icon="sort"></fa-icon></th>
-					<th scope="col" jhiSortBy="nbrEquipe"><span
-						jhiTranslate="plateauFffApp.plateau.nbrEquipe">Nbr Equipe</span> <fa-icon
+					<th scope="col" jhiSortBy="nombreEquipe"><span
+						jhiTranslate="plateauFffApp.plateau.nombreEquipe">Nbr Equipe</span> <fa-icon
 							icon="sort"></fa-icon></th>
 					<th scope="col" jhiSortBy="referent.nom"><span
 						jhiTranslate="plateauFffApp.plateau.referent">Referent</span> <fa-icon
@@ -79,7 +77,6 @@
 						<fa-icon icon="sort"></fa-icon>
 					</th>
 					<th scope="col"></th>					
-					<th scope="col"></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -94,9 +91,8 @@
 				 ouvrir
 			</button>
 						</td>
-					<td>{{ plateau.adresse }}</td>
-					<td class="text-center">{{ plateau.nbrEquipe }}</td>
-					<td class="text-center">{{ plateau.nbrEquipe -3 }}</td>
+					<td class="text-center">{{ plateau.nombreEquipeMax }}</td>
+					<td class="text-center">{{ plateau.nombreEquipeMax -3 }}</td>
 					<td>
 						<div *ngIf="plateau.referent">
 							<a [routerLink]="['/referent', plateau.referent?.id, 'view']">{{
@@ -105,6 +101,7 @@
 					</td>
 					<td class="text-center">{{ plateau.statut }}</td>
 					<td class="text-right" *jhiHasAnyAuthority="'ROLE_USER'">
+						
 						<div class="btn-group" *ngIf="!currentAccount || currentAccount.login === plateau.user.login">
 							<button type="submit"
 								[routerLink]="['/plateau', plateau.id, 'view']"
@@ -125,7 +122,7 @@
 							</button>
 
 							<button *ngIf="canSinscrire(plateau)" type="submit"
-									[routerLink]="['/plateau', plateau.id, 'view']"
+								(click)=inscription(plateau)
 									class="btn btn-info btn-sm">
 									<fa-icon icon="plus"><span class="hidden-sm-down">S'inscrire</span></fa-icon>
 							</button>
@@ -138,7 +135,8 @@
 							</button>
 							<button type="submit" 
 									*ngIf="canSinscrire(plateau)"
-									[routerLink]="['/plateau', plateau.id, 'view']"
+									
+									(click)=inscription(plateau)
 									class="btn btn-info btn-sm">
 									<fa-icon icon="plus"><span class="hidden-sm-down">S'inscrire</span></fa-icon>
 							</button>

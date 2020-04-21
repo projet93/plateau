@@ -1,6 +1,7 @@
 import { Moment } from 'moment';
 import { IReferent } from 'app/shared/model/referent.model';
 import { IUser } from 'app/core/user/user.model';
+import { IStade } from 'app/shared/model/stade.model';
 import { Statut } from 'app/shared/model/enumerations/statut.model';
 
 export interface IPlateau {
@@ -11,12 +12,12 @@ export interface IPlateau {
   heureFin?: string;
   programmeContentType?: string;
   programme?: any;
-  adresse?: string;
-  nbrEquipe?: number;
+  nombreEquipeMax?: number;
   statut?: Statut;
   valid?: boolean;
   referent?: IReferent;
   user?: IUser;
+  stade?: IStade;
 }
 
 export class Plateau implements IPlateau {
@@ -28,12 +29,12 @@ export class Plateau implements IPlateau {
     public heureFin?: string,
     public programmeContentType?: string,
     public programme?: any,
-    public adresse?: string,
-    public nbrEquipe?: number,
+    public nombreEquipeMax?: number,
     public statut?: Statut,
     public valid?: boolean,
     public referent?: IReferent,
-    public user?: IUser
+    public user?: IUser,
+    public stade?: IStade
   ) {
     this.valid = this.valid || false;
   }

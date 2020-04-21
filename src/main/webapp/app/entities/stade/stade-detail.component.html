@@ -24,6 +24,10 @@
                 <dd>
                     <span>{{ stade.ville }}</span>
                 </dd>
+                <dt><span jhiTranslate="plateauFffApp.stade.user">User</span></dt>
+                <dd>
+                    {{ stade.user?.id }}
+                </dd>
                 <dt><span jhiTranslate="plateauFffApp.stade.club">Club</span></dt>
                 <dd>
                     <div *ngIf="stade.club">

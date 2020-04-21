@@ -19,6 +19,7 @@ export class PlateauResolve implements Resolve<IPlateau> {
 
   resolve(route: ActivatedRouteSnapshot): Observable<IPlateau> | Observable<never> {
     const id = route.params['id'];
+   
     if (id) {
       return this.service.find(id).pipe(
         flatMap((plateau: HttpResponse<Plateau>) => {

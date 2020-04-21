@@ -2,11 +2,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpHeaders, HttpResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
-import { Account } from 'app/core/user/account.model';
 import { JhiEventManager, JhiDataUtils } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Account } from 'app/core/user/account.model';
 import { AccountService } from 'app/core/auth/account.service';
+import { flatMap } from 'rxjs/operators';
 import { IPlateau, Plateau } from 'app/shared/model/plateau.model';
 
 import { ITEMS_PER_PAGE } from 'app/shared/constants/pagination.constants';
@@ -81,24 +81,26 @@ export class PlateauComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(data => {
-      this.page = data.pagingParams.page;
-      this.ascending = data.pagingParams.ascending;
-      this.predicate = data.pagingParams.predicate;
-      this.ngbPaginationPage = data.pagingParams.page;
-      this.loadPage();
-    });
-    this.registerChangeInPlateaus();
+    
+
     this.activatedRoute.data
-      .pipe(
-        flatMap(
-          () => this.accountService.identity(),
-          (data, account) => {            
-            this.currentAccount = account;
-          }
-        )
+    .pipe(
+      flatMap(
+        () => this.accountService.identity(),
+        (data, account) => {
+          this.page = data.pagingParams.page;
+          this.ascending = data.pagingParams.ascending;
+          this.predicate = data.pagingParams.predicate;
+          this.ngbPaginationPage = data.pagingParams.page;
+          this.currentAccount = account;
+          this.loadPage();
+        }
       )
-      .subscribe();
+    )
+    .subscribe();
+    this.registerChangeInPlateaus();
+
+    
   }
 
   ngOnDestroy(): void {
@@ -137,7 +139,7 @@ export class PlateauComponent implements OnInit, OnDestroy {
     return result;
   }
   canSinscrire(plateau: Plateau|any): boolean {
-    if(plateau.statut !== Statut.ENATTENTE && plateau.valid){
+    if(plateau.statut === Statut.ENCOURS && plateau.valid){
       window.console.log(plateau.statut !== Statut.ENATTENTE);
       return true;
     }
@@ -162,8 +164,16 @@ export class PlateauComponent implements OnInit, OnDestroy {
   protected onError(): void {
     this.ngbPaginationPage = this.page;
   }
-  
   setActive(plateau: IPlateau, isActivated: boolean): void {
     this.plateauService.update({ ...plateau, valid: isActivated, statut: Statut.ENCOURS }).subscribe(() => this.loadPage());
   }
+  inscription(plateau: IPlateau): void{
+    localStorage.setItem('maxEquipe', JSON.stringify(plateau.nombreEquipeMax));
+    localStorage.setItem('id', JSON.stringify(plateau.id));
+    localStorage.setItem('user', JSON.stringify(plateau.user?.id));
+    this.router.navigate(['/inscription/new']);
+    window.scrollTo(0, 0);
+  }
+
+  
 }

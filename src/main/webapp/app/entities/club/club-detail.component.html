@@ -33,6 +33,10 @@
                 <dd>
                     <span>{{ club.email }}</span>
                 </dd>
+                <dt><span jhiTranslate="plateauFffApp.club.user">User</span></dt>
+                <dd>
+                    {{ club.user?.id }}
+                </dd>
                 <dt><span jhiTranslate="plateauFffApp.club.categorie">Categorie</span></dt>
                 <dd>
                     <span *ngFor="let categorie of club.categories; let last = last">

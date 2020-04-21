@@ -157,6 +157,24 @@ public class StadeResourceIT {
 
     @Test
     @Transactional
+    public void checkNomIsRequired() throws Exception {
+        int databaseSizeBeforeTest = stadeRepository.findAll().size();
+        // set the field null
+        stade.setNom(null);
+
+        // Create the Stade, which fails.
+
+        restStadeMockMvc.perform(post("/api/stades")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(stade)))
+            .andExpect(status().isBadRequest());
+
+        List<Stade> stadeList = stadeRepository.findAll();
+        assertThat(stadeList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllStades() throws Exception {
         // Initialize the database
         stadeRepository.saveAndFlush(stade);

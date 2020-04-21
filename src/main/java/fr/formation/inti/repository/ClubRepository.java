@@ -17,6 +17,9 @@ import java.util.Optional;
 @Repository
 public interface ClubRepository extends JpaRepository<Club, Long> {
 
+    @Query("select club from Club club where club.user.login = ?#{principal.username}")
+    List<Club> findByUserIsCurrentUser();
+
     @Query(value = "select distinct club from Club club left join fetch club.categories",
         countQuery = "select count(distinct club) from Club club")
     Page<Club> findAllWithEagerRelationships(Pageable pageable);
@@ -26,4 +29,11 @@ public interface ClubRepository extends JpaRepository<Club, Long> {
 
     @Query("select club from Club club left join fetch club.categories where club.id =:id")
     Optional<Club> findOneWithEagerRelationships(@Param("id") Long id);
+    
+    @Query("select club from Club club where club.user.id =:id")
+    Optional<Club> findClubByUserIsCurrentUser(@Param("id") Long id);
+
+    @Query("select club from Club club where club.user.login = ?#{principal.username}")
+	Page<Club> findByUserIsCurrentUser(Pageable pageable);
+
 }

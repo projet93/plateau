@@ -23,6 +23,10 @@ import { RouterModule } from '@angular/router';
       {
         path: 'plateau',
         loadChildren: () => import('./plateau/plateau.module').then(m => m.PlateauFffPlateauModule)
+      },
+      {
+        path: 'inscription',
+        loadChildren: () => import('./inscription/inscription.module').then(m => m.PlateauFffInscriptionModule)
       }
       /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
     ])

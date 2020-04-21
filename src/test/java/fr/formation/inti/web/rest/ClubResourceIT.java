@@ -194,6 +194,24 @@ public class ClubResourceIT {
 
     @Test
     @Transactional
+    public void checkEmailIsRequired() throws Exception {
+        int databaseSizeBeforeTest = clubRepository.findAll().size();
+        // set the field null
+        club.setEmail(null);
+
+        // Create the Club, which fails.
+
+        restClubMockMvc.perform(post("/api/clubs")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(club)))
+            .andExpect(status().isBadRequest());
+
+        List<Club> clubList = clubRepository.findAll();
+        assertThat(clubList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllClubs() throws Exception {
         // Initialize the database
         clubRepository.saveAndFlush(club);

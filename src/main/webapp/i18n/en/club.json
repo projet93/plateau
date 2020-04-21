@@ -23,6 +23,7 @@
       "telephone": "Telephone",
       "email": "Email",
       "stade": "Stade",
+      "user": "User",
       "categorie": "Categorie"
     }
   }

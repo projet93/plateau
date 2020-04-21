@@ -3,7 +3,10 @@
     "fields": [
         {
             "fieldName": "dateDebut",
-            "fieldType": "LocalDate"
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldName": "dateFin",
@@ -23,17 +26,13 @@
             "fieldTypeBlobContent": "any"
         },
         {
-            "fieldName": "adresse",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "nbrEquipe",
+            "fieldName": "nombreEquipeMax",
             "fieldType": "Integer"
         },
         {
             "fieldName": "statut",
             "fieldType": "Statut",
-            "fieldValues": "ENCOURS,COMPLET,CLOTURE"
+            "fieldValues": "ENATTENTE,ENCOURS,COMPLET,CLOTURE"
         },
         {
             "fieldName": "valid",
@@ -56,12 +55,11 @@
             "otherEntityField": "id"
         },
         {
-            "relationshipType": "many-to-many",
-            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityName": "stade",
             "otherEntityRelationshipName": "plateau",
-            "relationshipName": "user",
-            "otherEntityField": "id",
-            "ownerSide": true
+            "relationshipName": "stade",
+            "otherEntityField": "nom"
         }
     ],
     "changelogDate": "20200414130300",

@@ -20,17 +20,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
 
-        <addForeignKeyConstraint baseColumnNames="plateau_id"
-                                 baseTableName="plateau_user"
-                                 constraintName="fk_plateau_user_plateau_id"
+        <addForeignKeyConstraint baseColumnNames="stade_id"
+                                 baseTableName="plateau"
+                                 constraintName="fk_plateau_stade_id"
                                  referencedColumnNames="id"
-                                 referencedTableName="plateau"/>
+                                 referencedTableName="stade"/>
 
-        <addForeignKeyConstraint baseColumnNames="user_id"
-                                 baseTableName="plateau_user"
-                                 constraintName="fk_plateau_user_user_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="jhi_user"/>
-        
     </changeSet>
 </databaseChangeLog>

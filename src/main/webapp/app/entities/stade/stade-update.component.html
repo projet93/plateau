@@ -15,6 +15,12 @@
                     <label class="form-control-label" jhiTranslate="plateauFffApp.stade.nom" for="field_nom">Nom</label>
                     <input type="text" class="form-control" name="nom" id="field_nom"
                            formControlName="nom"/>
+                    <div *ngIf="editForm.get('nom')!.invalid && (editForm.get('nom')!.dirty || editForm.get('nom')!.touched)">
+                        <small class="form-text text-danger"
+                               *ngIf="editForm.get('nom')?.errors?.required" jhiTranslate="entity.validation.required">
+                        This field is required.
+                        </small>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -35,13 +41,6 @@
                            formControlName="ville"/>
                 </div>
 
-                <div class="form-group">
-                    <label class="form-control-label" jhiTranslate="plateauFffApp.stade.club" for="field_club">Club</label>
-                    <select class="form-control" id="field_club" name="club" formControlName="club">
-                        <option [ngValue]="null"></option>
-                        <option [ngValue]="clubOption.id === editForm.get('club')!.value?.id ? editForm.get('club')!.value : clubOption" *ngFor="let clubOption of clubs; trackBy: trackById">{{ clubOption.nom }}</option>
-                    </select>
-                </div>
             </div>
 
             <div>

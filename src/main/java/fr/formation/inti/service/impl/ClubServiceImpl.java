@@ -82,6 +82,14 @@ public class ClubServiceImpl implements ClubService {
         log.debug("Request to get Club : {}", id);
         return clubRepository.findOneWithEagerRelationships(id);
     }
+    
+    
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<Club> findByUser(Long id) {
+    	
+    	return clubRepository.findClubByUserIsCurrentUser(id);
+    }
 
     /**
      * Delete the club by id.
@@ -107,4 +115,11 @@ public class ClubServiceImpl implements ClubService {
     public Page<Club> search(String query, Pageable pageable) {
         log.debug("Request to search for a page of Clubs for query {}", query);
         return clubSearchRepository.search(queryStringQuery(query), pageable);    }
+
+    @Override
+    @Transactional(readOnly = true)
+	public Page<Club> findByUserIsCurrentUser(Pageable pageable) {
+		return clubRepository.findByUserIsCurrentUser(pageable);
+	}
+
 }

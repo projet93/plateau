@@ -9,8 +9,12 @@ import { JhiDataUtils, JhiFileLoadError, JhiEventManager, JhiEventWithContent } 
 import { IClub, Club } from 'app/shared/model/club.model';
 import { ClubService } from './club.service';
 import { AlertError } from 'app/shared/alert/alert-error.model';
+import { IUser } from 'app/core/user/user.model';
+import { UserService } from 'app/core/user/user.service';
 import { ICategorie } from 'app/shared/model/categorie.model';
 import { CategorieService } from 'app/entities/categorie/categorie.service';
+
+type SelectableEntity = IUser | ICategorie;
 
 @Component({
   selector: 'jhi-club-update',
@@ -18,6 +22,7 @@ import { CategorieService } from 'app/entities/categorie/categorie.service';
 })
 export class ClubUpdateComponent implements OnInit {
   isSaving = false;
+  users: IUser[] = [];
   categories: ICategorie[] = [];
 
   editForm = this.fb.group({
@@ -27,7 +32,8 @@ export class ClubUpdateComponent implements OnInit {
     nom: [null, [Validators.required]],
     adresse: [],
     telephone: [],
-    email: [],
+    email: [null, [Validators.required]],
+    user: [],
     categories: []
   });
 
@@ -35,6 +41,7 @@ export class ClubUpdateComponent implements OnInit {
     protected dataUtils: JhiDataUtils,
     protected eventManager: JhiEventManager,
     protected clubService: ClubService,
+    protected userService: UserService,
     protected categorieService: CategorieService,
     protected elementRef: ElementRef,
     protected activatedRoute: ActivatedRoute,
@@ -44,6 +51,8 @@ export class ClubUpdateComponent implements OnInit {
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ club }) => {
       this.updateForm(club);
+
+      this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
 
       this.categorieService.query().subscribe((res: HttpResponse<ICategorie[]>) => (this.categories = res.body || []));
     });
@@ -58,6 +67,7 @@ export class ClubUpdateComponent implements OnInit {
       adresse: club.adresse,
       telephone: club.telephone,
       email: club.email,
+      user: club.user,
       categories: club.categories
     });
   }
@@ -112,6 +122,7 @@ export class ClubUpdateComponent implements OnInit {
       adresse: this.editForm.get(['adresse'])!.value,
       telephone: this.editForm.get(['telephone'])!.value,
       email: this.editForm.get(['email'])!.value,
+      user: this.editForm.get(['user'])!.value,
       categories: this.editForm.get(['categories'])!.value
     };
   }
@@ -132,7 +143,7 @@ export class ClubUpdateComponent implements OnInit {
     this.isSaving = false;
   }
 
-  trackById(index: number, item: ICategorie): any {
+  trackById(index: number, item: SelectableEntity): any {
     return item.id;
   }
 

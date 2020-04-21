@@ -54,9 +54,7 @@ public class PlateauCriteria implements Serializable, Criteria {
 
     private StringFilter heureFin;
 
-    private StringFilter adresse;
-
-    private IntegerFilter nbrEquipe;
+    private IntegerFilter nombreEquipeMax;
 
     private StatutFilter statut;
 
@@ -65,6 +63,8 @@ public class PlateauCriteria implements Serializable, Criteria {
     private LongFilter referentId;
 
     private LongFilter userId;
+
+    private LongFilter stadeId;
 
     public PlateauCriteria() {
     }
@@ -75,13 +75,12 @@ public class PlateauCriteria implements Serializable, Criteria {
         this.dateFin = other.dateFin == null ? null : other.dateFin.copy();
         this.heureDebut = other.heureDebut == null ? null : other.heureDebut.copy();
         this.heureFin = other.heureFin == null ? null : other.heureFin.copy();
-        this.adresse = other.adresse == null ? null : other.adresse.copy();
-        this.nbrEquipe = other.nbrEquipe == null ? null : other.nbrEquipe.copy();
+        this.nombreEquipeMax = other.nombreEquipeMax == null ? null : other.nombreEquipeMax.copy();
         this.statut = other.statut == null ? null : other.statut.copy();
         this.valid = other.valid == null ? null : other.valid.copy();
         this.referentId = other.referentId == null ? null : other.referentId.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
-        this.userId = other.userId == null ? null : other.userId.copy();
+        this.stadeId = other.stadeId == null ? null : other.stadeId.copy();
     }
 
     @Override
@@ -129,20 +128,12 @@ public class PlateauCriteria implements Serializable, Criteria {
         this.heureFin = heureFin;
     }
 
-    public StringFilter getAdresse() {
-        return adresse;
+    public IntegerFilter getNombreEquipeMax() {
+        return nombreEquipeMax;
     }
 
-    public void setAdresse(StringFilter adresse) {
-        this.adresse = adresse;
-    }
-
-    public IntegerFilter getNbrEquipe() {
-        return nbrEquipe;
-    }
-
-    public void setNbrEquipe(IntegerFilter nbrEquipe) {
-        this.nbrEquipe = nbrEquipe;
+    public void setNombreEquipeMax(IntegerFilter nombreEquipeMax) {
+        this.nombreEquipeMax = nombreEquipeMax;
     }
 
     public StatutFilter getStatut() {
@@ -177,7 +168,15 @@ public class PlateauCriteria implements Serializable, Criteria {
         this.userId = userId;
     }
 
-    
+    public LongFilter getStadeId() {
+        return stadeId;
+    }
+
+    public void setStadeId(LongFilter stadeId) {
+        this.stadeId = stadeId;
+    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -193,13 +192,12 @@ public class PlateauCriteria implements Serializable, Criteria {
             Objects.equals(dateFin, that.dateFin) &&
             Objects.equals(heureDebut, that.heureDebut) &&
             Objects.equals(heureFin, that.heureFin) &&
-            Objects.equals(adresse, that.adresse) &&
-            Objects.equals(nbrEquipe, that.nbrEquipe) &&
+            Objects.equals(nombreEquipeMax, that.nombreEquipeMax) &&
             Objects.equals(statut, that.statut) &&
             Objects.equals(valid, that.valid) &&
             Objects.equals(referentId, that.referentId) &&
             Objects.equals(userId, that.userId) &&
-            Objects.equals(userId, that.userId);
+            Objects.equals(stadeId, that.stadeId);
     }
 
     @Override
@@ -210,13 +208,12 @@ public class PlateauCriteria implements Serializable, Criteria {
         dateFin,
         heureDebut,
         heureFin,
-        adresse,
-        nbrEquipe,
+        nombreEquipeMax,
         statut,
         valid,
         referentId,
         userId,
-        userId
+        stadeId
         );
     }
 
@@ -228,13 +225,12 @@ public class PlateauCriteria implements Serializable, Criteria {
                 (dateFin != null ? "dateFin=" + dateFin + ", " : "") +
                 (heureDebut != null ? "heureDebut=" + heureDebut + ", " : "") +
                 (heureFin != null ? "heureFin=" + heureFin + ", " : "") +
-                (adresse != null ? "adresse=" + adresse + ", " : "") +
-                (nbrEquipe != null ? "nbrEquipe=" + nbrEquipe + ", " : "") +
+                (nombreEquipeMax != null ? "nombreEquipeMax=" + nombreEquipeMax + ", " : "") +
                 (statut != null ? "statut=" + statut + ", " : "") +
                 (valid != null ? "valid=" + valid + ", " : "") +
                 (referentId != null ? "referentId=" + referentId + ", " : "") +
                 (userId != null ? "userId=" + userId + ", " : "") +
-                (userId != null ? "userId=" + userId + ", " : "") +
+                (stadeId != null ? "stadeId=" + stadeId + ", " : "") +
             "}";
     }
 

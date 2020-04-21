@@ -3,10 +3,10 @@ entity Club {
     nom String required,
     adresse String,
     telephone String,
-    email String
+    email String required
 }
 entity Stade {
-	nom String,
+	nom String required,
     adresse String,
     codePostal String,
     ville String
@@ -28,13 +28,12 @@ entity Referent {
 }
 
 entity Plateau {
-	dateDebut LocalDate,
+	dateDebut LocalDate required,
     dateFin LocalDate,
     heureDebut String,
     heureFin String,
     programme Blob,
-    adresse String,
-    nbrEquipe Integer,
+    nombreEquipeMax Integer,
     statut Statut,
     valid Boolean
 }
@@ -42,15 +41,16 @@ entity Plateau {
 enum Statut{
 	ENATTENTE,ENCOURS,COMPLET,CLOTURE
 }
+entity Inscription {
+    nombreEquipe Integer required
+}
 
 
 relationship OneToMany {
-	Club{stade(nom)} to Stade{club(nom)}
-	
+	Club{stade(nom)} to Stade{club(nom)},
 }
 relationship ManyToMany {
-    Club{categorie(section)} to Categorie{club(nom)},
-    Plateau{user} to User
+    Club{categorie(section)} to Categorie{club(nom)}
 }
 
 relationship ManyToOne {
@@ -58,8 +58,14 @@ relationship ManyToOne {
     Plateau{user} to User,
     Referent{user} to User,
     Categorie{user} to User,
-    Stade{user} to User
+    Stade{user} to User,
+    Inscription{plateau} to Plateau,
+    Inscription{club(nom)} to Club,
+    Inscription{referent(nom)} to Referent,
+    Plateau{stade(nom)} to Stade,
+    Club{user} to User
 }
+
 paginate Plateau, Club, Stade with infinite-scroll
 paginate Plateau, Club, Stade, Referent with pagination
 

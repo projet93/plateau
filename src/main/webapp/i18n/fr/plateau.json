@@ -2,7 +2,7 @@
   "plateauFffApp": {
     "plateau": {
       "home": {
-        "title": "Plateaux",
+        "title": "Plateau",
         "createLabel": "Créer un nouveau Plateau",
         "createOrEditLabel": "Créer ou éditer un Plateau",
         "search": "Recherche pour Plateau",
@@ -22,14 +22,13 @@
       "heureDebut": "Heure Debut",
       "heureFin": "Heure Fin",
       "programme": "Programme",
-      "adresse": "Adresse",
-      "nbrEquipeMax": "Nbr Equipe Max",
-      "nbrEquipe": "Nbr Equipe",
+      "nombreEquipeMax": "Nombre Equipe Max",
+      "nombreEquipe": "Nombre Equipe",
       "statut": "Statut",
       "valid": "Valid",
       "referent": "Referent",
       "user": "User",
-      "user": "User"
+      "stade": "Stade"
     }
   }
 }
