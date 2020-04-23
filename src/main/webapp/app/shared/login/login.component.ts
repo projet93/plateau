@@ -24,9 +24,9 @@ export class LoginModalComponent implements AfterViewInit {
   constructor(private loginService: LoginService, private router: Router, public activeModal: NgbActiveModal, private fb: FormBuilder) {}
 
   ngAfterViewInit(): void {
-    if (this.username) {
-      this.username.nativeElement.focus();
-    }
+    // if (this.username) {
+    //   this.username.nativeElement.focus();
+    // }
   }
 
   cancel(): void {

@@ -30,8 +30,8 @@ public interface ClubRepository extends JpaRepository<Club, Long> {
     @Query("select club from Club club left join fetch club.categories where club.id =:id")
     Optional<Club> findOneWithEagerRelationships(@Param("id") Long id);
     
-    @Query("select club from Club club where club.user.id =:id")
-    Optional<Club> findClubByUserIsCurrentUser(@Param("id") Long id);
+    @Query("select club from Club club where club.user.login = ?#{principal.username}")
+    Optional<Club> findClubByUserIsCurrentUser();
 
     @Query("select club from Club club where club.user.login = ?#{principal.username}")
 	Page<Club> findByUserIsCurrentUser(Pageable pageable);

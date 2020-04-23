@@ -2,7 +2,10 @@ package fr.formation.inti.repository;
 
 import fr.formation.inti.domain.Inscription;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -11,4 +14,7 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface InscriptionRepository extends JpaRepository<Inscription, Long> {
+
+	@Query("select inscription from Inscription inscription where inscription.plateau.id =:id")
+	List<Inscription> findAllByPlateau(@Param("id") Long id);
 }

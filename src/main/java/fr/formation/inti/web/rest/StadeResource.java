@@ -79,7 +79,7 @@ public class StadeResource {
             log.debug("No user passed in, using current user: {}", SecurityUtils.getCurrentUserLogin());
             User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin().orElse(null)).orElse(null);
             stade.setUser(user);
-            stade.setClub(clubRepository.findClubByUserIsCurrentUser(user.getId()).get());
+            stade.setClub(clubRepository.findClubByUserIsCurrentUser().get());
         }
         Stade result = stadeService.save(stade);
         return ResponseEntity.created(new URI("/api/stades/" + result.getId()))

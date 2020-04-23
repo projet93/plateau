@@ -4,10 +4,13 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { JhiEventManager } from 'ng-jhipster';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Account } from 'app/core/user/account.model';
+import { AccountService } from 'app/core/auth/account.service';
 
 import { IInscription } from 'app/shared/model/inscription.model';
 import { InscriptionService } from './inscription.service';
 import { InscriptionDeleteDialogComponent } from './inscription-delete-dialog.component';
+import { flatMap } from 'rxjs/operators';
 
 @Component({
   selector: 'jhi-inscription',
@@ -17,11 +20,13 @@ export class InscriptionComponent implements OnInit, OnDestroy {
   inscriptions?: IInscription[];
   eventSubscriber?: Subscription;
   currentSearch: string;
+  currentAccount: Account | null = null;
 
   constructor(
     protected inscriptionService: InscriptionService,
     protected eventManager: JhiEventManager,
     protected modalService: NgbModal,
+    private accountService: AccountService,
     protected activatedRoute: ActivatedRoute
   ) {
     this.currentSearch =
@@ -31,6 +36,7 @@ export class InscriptionComponent implements OnInit, OnDestroy {
   }
 
   loadAll(): void {
+    
     if (this.currentSearch) {
       this.inscriptionService
         .search({
@@ -39,8 +45,17 @@ export class InscriptionComponent implements OnInit, OnDestroy {
         .subscribe((res: HttpResponse<IInscription[]>) => (this.inscriptions = res.body || []));
       return;
     }
-
-    this.inscriptionService.query().subscribe((res: HttpResponse<IInscription[]>) => (this.inscriptions = res.body || []));
+    this.activatedRoute.data
+    .pipe(
+      flatMap(
+        () => this.accountService.identity(),
+        (data, account) => {
+          this.currentAccount = account;
+        }
+      )
+    ).subscribe();
+    window.console.log('=========>',this.currentAccount);
+    this.inscriptionService.queryByPlateau(localStorage['id']).subscribe((res: HttpResponse<IInscription[]>) => (this.inscriptions = res.body || []));
   }
 
   search(query: string): void {

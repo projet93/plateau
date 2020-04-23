@@ -32,41 +32,70 @@ import fr.formation.inti.web.rest.errors.BadRequestAlertException;
 @Transactional
 public class InscriptionServiceImpl implements InscriptionService {
 
-    private final Logger log = LoggerFactory.getLogger(InscriptionServiceImpl.class);
+	private final Logger log = LoggerFactory.getLogger(InscriptionServiceImpl.class);
 
-    private final InscriptionRepository inscriptionRepository;
+	private final InscriptionRepository inscriptionRepository;
 
-    @Autowired
-    private PlateauRepository plateauRepository;
-    
-    
-    private final InscriptionSearchRepository inscriptionSearchRepository;
+	@Autowired
+	private PlateauRepository plateauRepository;
 
-    public InscriptionServiceImpl(InscriptionRepository inscriptionRepository, InscriptionSearchRepository inscriptionSearchRepository) {
-        this.inscriptionRepository = inscriptionRepository;
-        this.inscriptionSearchRepository = inscriptionSearchRepository;
-    }
+	private final InscriptionSearchRepository inscriptionSearchRepository;
 
-    /**
-     * Save a inscription.
-     *
-     * @param inscription the entity to save.
-     * @return the persisted entity.
-     */
-    @Override
+	public InscriptionServiceImpl(InscriptionRepository inscriptionRepository,
+			InscriptionSearchRepository inscriptionSearchRepository) {
+		this.inscriptionRepository = inscriptionRepository;
+		this.inscriptionSearchRepository = inscriptionSearchRepository;
+	}
+
+	/**
+	 * Save a inscription.
+	 *
+	 * @param inscription the entity to save.
+	 * @return the persisted entity.
+	 */
+	@Override
+	@Transactional
+	@Lock(LockModeType.PESSIMISTIC_WRITE)
+	public Inscription save(Inscription inscription) {
+		log.debug("Request to save Inscription : {}", inscription);
+		// il faut faire l'update ( tester if (id != null) refaire le calcule
+		Plateau plateau = plateauRepository.findOneWithEagerRelationships(inscription.getPlateau().getId()).get();
+		Integer nbrMax = plateau.getNombreEquipeMax();
+		Integer nbrParticipant = plateau.getNombreEquipe();
+		if (nbrMax < (inscription.getNombreEquipe() + nbrParticipant)) {
+			throw new BadRequestAlertException("impossible de faire l'inscription", "inscription", "");
+		}
+		if ((nbrMax - (nbrParticipant + inscription.getNombreEquipe())) == 0)
+			plateau.setStatut(Statut.COMPLET);
+		plateau.setNombreEquipe(nbrParticipant + inscription.getNombreEquipe());
+		plateauRepository.save(plateau);
+		inscription.setPlateau(plateau);
+		Inscription result = inscriptionRepository.save(inscription);
+		inscriptionSearchRepository.save(result);
+		return result;
+	}
+
+	@Override
     @Transactional
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    public Inscription save(Inscription inscription) {
+    public Inscription update(Inscription inscription) {
         log.debug("Request to save Inscription : {}", inscription);
-        
+        // il faut faire l'update ( tester if (id != null) refaire le calcule 
         Plateau plateau = plateauRepository.findOneWithEagerRelationships(inscription.getPlateau().getId()).get();
+        Inscription oldInscrition = inscriptionRepository.getOne(inscription.getId());
         Integer nbrMax = plateau.getNombreEquipeMax();
-        if(nbrMax < inscription.getNombreEquipe()) {
+        Integer nbrParticipant = plateau.getNombreEquipe();
+        nbrParticipant += (inscription.getNombreEquipe() - oldInscrition.getNombreEquipe());
+        	
+        
+        if(nbrMax < (nbrParticipant)) {
         	throw new BadRequestAlertException("impossible de faire l'inscription","inscription","");
         }
-        if((nbrMax-inscription.getNombreEquipe()) == 0)
-        	plateau.setStatut(Statut.CLOTURE);
-        plateau.setNombreEquipeMax(nbrMax - inscription.getNombreEquipe());
+        if((nbrMax-(nbrParticipant)) == 0)
+        	plateau.setStatut(Statut.COMPLET);
+        else
+        	plateau.setStatut(Statut.ENCOURS);
+        plateau.setNombreEquipe(nbrParticipant);
         plateauRepository.save(plateau);
         inscription.setPlateau(plateau);
         Inscription result = inscriptionRepository.save(inscription);
@@ -74,55 +103,61 @@ public class InscriptionServiceImpl implements InscriptionService {
         return result;
     }
 
-    /**
-     * Get all the inscriptions.
-     *
-     * @return the list of entities.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<Inscription> findAll() {
-        log.debug("Request to get all Inscriptions");
-        return inscriptionRepository.findAll();
-    }
+	/**
+	 * Get all the inscriptions.
+	 *
+	 * @return the list of entities.
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public List<Inscription> findAll() {
+		log.debug("Request to get all Inscriptions");
+		return inscriptionRepository.findAll();
+	}
 
-    /**
-     * Get one inscription by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<Inscription> findOne(Long id) {
-        log.debug("Request to get Inscription : {}", id);
-        return inscriptionRepository.findById(id);
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public List<Inscription> findAllByPlateau(Long id) {
+		log.debug("Request to get all Inscriptions");
+		return inscriptionRepository.findAllByPlateau(id);
+	}
 
-    /**
-     * Delete the inscription by id.
-     *
-     * @param id the id of the entity.
-     */
-    @Override
-    public void delete(Long id) {
-        log.debug("Request to delete Inscription : {}", id);
-        inscriptionRepository.deleteById(id);
-        inscriptionSearchRepository.deleteById(id);
-    }
+	/**
+	 * Get one inscription by id.
+	 *
+	 * @param id the id of the entity.
+	 * @return the entity.
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public Optional<Inscription> findOne(Long id) {
+		log.debug("Request to get Inscription : {}", id);
+		return inscriptionRepository.findById(id);
+	}
 
-    /**
-     * Search for the inscription corresponding to the query.
-     *
-     * @param query the query of the search.
-     * @return the list of entities.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<Inscription> search(String query) {
-        log.debug("Request to search Inscriptions for query {}", query);
-        return StreamSupport
-            .stream(inscriptionSearchRepository.search(queryStringQuery(query)).spliterator(), false)
-            .collect(Collectors.toList());
-    }
+	/**
+	 * Delete the inscription by id.
+	 *
+	 * @param id the id of the entity.
+	 */
+	@Override
+	public void delete(Long id) {
+		log.debug("Request to delete Inscription : {}", id);
+		inscriptionRepository.deleteById(id);
+		inscriptionSearchRepository.deleteById(id);
+	}
+
+	/**
+	 * Search for the inscription corresponding to the query.
+	 *
+	 * @param query the query of the search.
+	 * @return the list of entities.
+	 */
+	@Override
+	@Transactional(readOnly = true)
+	public List<Inscription> search(String query) {
+		log.debug("Request to search Inscriptions for query {}", query);
+		return StreamSupport.stream(inscriptionSearchRepository.search(queryStringQuery(query)).spliterator(), false)
+				.collect(Collectors.toList());
+	}
 }

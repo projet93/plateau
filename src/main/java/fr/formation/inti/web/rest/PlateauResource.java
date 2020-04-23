@@ -99,6 +99,7 @@ public class PlateauResource {
         if (plateau.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
+        plateau.setNombreEquipe(0);
         Plateau result = plateauService.save(plateau);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, plateau.getId().toString()))

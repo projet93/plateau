@@ -48,4 +48,6 @@ public interface CategorieService {
      * @return the list of entities.
      */
     List<Categorie> search(String query);
+
+	List<Categorie> findByUserIsCurrentUser();
 }

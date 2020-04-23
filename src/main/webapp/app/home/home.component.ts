@@ -15,11 +15,13 @@ export class HomeComponent implements OnInit, OnDestroy {
   authSubscription?: Subscription;
   lat = 48.9321269;
   lng = 2.4015819;
+  titre: any;
 
   constructor(private accountService: AccountService, private loginModalService: LoginModalService) {}
 
   ngOnInit(): void {
     this.authSubscription = this.accountService.getAuthenticationState().subscribe(account => (this.account = account));
+    
   }
 
   isAuthenticated(): boolean {
@@ -28,6 +30,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   login(): void {
     this.loginModalService.open();
+    
   }
 
   ngOnDestroy(): void {

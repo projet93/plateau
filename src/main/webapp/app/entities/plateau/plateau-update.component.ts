@@ -15,8 +15,10 @@ import { IUser } from 'app/core/user/user.model';
 import { UserService } from 'app/core/user/user.service';
 import { IStade } from 'app/shared/model/stade.model';
 import { StadeService } from 'app/entities/stade/stade.service';
+import { ICategorie } from 'app/shared/model/categorie.model';
+import { CategorieService } from 'app/entities/categorie/categorie.service';
 
-type SelectableEntity = IReferent | IUser | IStade;
+type SelectableEntity = IReferent | IUser | IStade | ICategorie;
 
 @Component({
   selector: 'jhi-plateau-update',
@@ -27,6 +29,7 @@ export class PlateauUpdateComponent implements OnInit {
   referents: IReferent[] = [];
   users: IUser[] = [];
   stades: IStade[] = [];
+  categories: ICategorie[] = [];
   dateDebutDp: any;
   dateFinDp: any;
 
@@ -39,11 +42,13 @@ export class PlateauUpdateComponent implements OnInit {
     programme: [],
     programmeContentType: [],
     nombreEquipeMax: [],
+    nombreEquipe: [],
     statut: [],
     valid: [],
     referent: [],
     user: [],
-    stade: []
+    stade: [],
+    categorie: []
   });
 
   constructor(
@@ -53,6 +58,7 @@ export class PlateauUpdateComponent implements OnInit {
     protected referentService: ReferentService,
     protected userService: UserService,
     protected stadeService: StadeService,
+    protected categorieService: CategorieService,
     protected activatedRoute: ActivatedRoute,
     private fb: FormBuilder
   ) {}
@@ -66,6 +72,8 @@ export class PlateauUpdateComponent implements OnInit {
       this.userService.query().subscribe((res: HttpResponse<IUser[]>) => (this.users = res.body || []));
 
       this.stadeService.query().subscribe((res: HttpResponse<IStade[]>) => (this.stades = res.body || []));
+
+      this.categorieService.queryByUser().subscribe((res: HttpResponse<ICategorie[]>) => (this.categories = res.body || []));
     });
   }
 
@@ -79,11 +87,13 @@ export class PlateauUpdateComponent implements OnInit {
       programme: plateau.programme,
       programmeContentType: plateau.programmeContentType,
       nombreEquipeMax: plateau.nombreEquipeMax,
+      nombreEquipe: plateau.nombreEquipe,
       statut: plateau.statut,
       valid: plateau.valid,
       referent: plateau.referent,
       user: plateau.user,
-      stade: plateau.stade
+      stade: plateau.stade,
+      categorie: plateau.categorie
     });
   }
 
@@ -128,11 +138,13 @@ export class PlateauUpdateComponent implements OnInit {
       programmeContentType: this.editForm.get(['programmeContentType'])!.value,
       programme: this.editForm.get(['programme'])!.value,
       nombreEquipeMax: this.editForm.get(['nombreEquipeMax'])!.value,
+      nombreEquipe: this.editForm.get(['nombreEquipe'])!.value,
       statut: this.editForm.get(['statut'])!.value,
       valid: this.editForm.get(['valid'])!.value,
       referent: this.editForm.get(['referent'])!.value,
       user: this.editForm.get(['user'])!.value,
-      stade: this.editForm.get(['stade'])!.value
+      stade: this.editForm.get(['stade'])!.value,
+      categorie: this.editForm.get(['categorie'])!.value
     };
   }
 

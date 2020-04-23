@@ -30,6 +30,10 @@
             "fieldType": "Integer"
         },
         {
+            "fieldName": "nombreEquipe",
+            "fieldType": "Integer"
+        },
+        {
             "fieldName": "statut",
             "fieldType": "Statut",
             "fieldValues": "ENATTENTE,ENCOURS,COMPLET,CLOTURE"
@@ -60,6 +64,13 @@
             "otherEntityRelationshipName": "plateau",
             "relationshipName": "stade",
             "otherEntityField": "nom"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "categorie",
+            "otherEntityRelationshipName": "plateau",
+            "relationshipName": "categorie",
+            "otherEntityField": "section"
         }
     ],
     "changelogDate": "20200414130300",

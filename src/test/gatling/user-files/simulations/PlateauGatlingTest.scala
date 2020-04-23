@@ -78,6 +78,7 @@ class PlateauGatlingTest extends Simulation {
                 , "heureFin":"SAMPLE_TEXT"
                 , "programme":null
                 , "nombreEquipeMax":"0"
+                , "nombreEquipe":"0"
                 , "statut":"ENATTENTE"
                 , "valid":null
                 }""")).asJson

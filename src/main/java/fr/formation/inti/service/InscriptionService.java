@@ -17,6 +17,14 @@ public interface InscriptionService {
      * @return the persisted entity.
      */
     Inscription save(Inscription inscription);
+    
+    /**
+     * Update a inscription.
+     *
+     * @param inscription the entity to update.
+     * @return the persisted entity.
+     */
+    Inscription update(Inscription inscription);
 
     /**
      * Get all the inscriptions.
@@ -48,4 +56,11 @@ public interface InscriptionService {
      * @return the list of entities.
      */
     List<Inscription> search(String query);
+
+    /**
+     * 
+     * @param id
+     * @return
+     */
+	List<Inscription> findAllByPlateau(Long id);
 }

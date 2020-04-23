@@ -37,6 +37,9 @@
             <column name="nombre_equipe_max" type="integer">
                 <constraints nullable="true" />
             </column>
+            <column name="nombre_equipe" type="integer">
+                <constraints nullable="true" />
+            </column>
             <column name="statut" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -50,6 +53,9 @@
                 <constraints nullable="true" />
             </column>
             <column name="stade_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="categorie_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
@@ -82,6 +88,7 @@
             <column name="programme" type="blob"/>
             <column name="programme_content_type" type="string"/>
             <column name="nombre_equipe_max" type="numeric"/>
+            <column name="nombre_equipe" type="numeric"/>
             <column name="statut" type="string"/>
             <column name="valid" type="boolean"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->

@@ -26,5 +26,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="stade"/>
 
+        <addForeignKeyConstraint baseColumnNames="categorie_id"
+                                 baseTableName="plateau"
+                                 constraintName="fk_plateau_categorie_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="categorie"/>
+
     </changeSet>
 </databaseChangeLog>

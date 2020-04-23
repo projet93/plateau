@@ -90,6 +90,11 @@ public class CategorieResource {
         log.debug("REST request to get all Categories");
         return categorieService.findAll();
     }
+    @GetMapping("/categories/user")
+    public List<Categorie> getAllCategoriesByCurrentUser() {
+        log.debug("REST request to get all Categories");
+        return categorieService.findByUserIsCurrentUser();
+    }
 
     /**
      * {@code GET  /categories/:id} : get the "id" categorie.

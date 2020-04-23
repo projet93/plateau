@@ -66,6 +66,8 @@ public class PlateauCriteria implements Serializable, Criteria {
 
     private LongFilter stadeId;
 
+    private LongFilter categorieId;
+
     public PlateauCriteria() {
     }
 
@@ -81,6 +83,7 @@ public class PlateauCriteria implements Serializable, Criteria {
         this.referentId = other.referentId == null ? null : other.referentId.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
         this.stadeId = other.stadeId == null ? null : other.stadeId.copy();
+        this.categorieId = other.categorieId == null ? null : other.categorieId.copy();
     }
 
     @Override
@@ -176,6 +179,14 @@ public class PlateauCriteria implements Serializable, Criteria {
         this.stadeId = stadeId;
     }
 
+    public LongFilter getCategorieId() {
+        return categorieId;
+    }
+
+    public void setCategorieId(LongFilter categorieId) {
+        this.categorieId = categorieId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -197,7 +208,8 @@ public class PlateauCriteria implements Serializable, Criteria {
             Objects.equals(valid, that.valid) &&
             Objects.equals(referentId, that.referentId) &&
             Objects.equals(userId, that.userId) &&
-            Objects.equals(stadeId, that.stadeId);
+            Objects.equals(stadeId, that.stadeId) &&
+            Objects.equals(categorieId, that.categorieId);
     }
 
     @Override
@@ -213,7 +225,8 @@ public class PlateauCriteria implements Serializable, Criteria {
         valid,
         referentId,
         userId,
-        stadeId
+        stadeId,
+        categorieId
         );
     }
 
@@ -231,6 +244,7 @@ public class PlateauCriteria implements Serializable, Criteria {
                 (referentId != null ? "referentId=" + referentId + ", " : "") +
                 (userId != null ? "userId=" + userId + ", " : "") +
                 (stadeId != null ? "stadeId=" + stadeId + ", " : "") +
+                (categorieId != null ? "categorieId=" + categorieId + ", " : "") +
             "}";
     }
 

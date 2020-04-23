@@ -62,5 +62,5 @@ public interface ClubService {
 
 	Page<Club> findByUserIsCurrentUser(Pageable pageable);
 
-	Optional<Club> findByUser(Long id);
+	Optional<Club> findByUser();
 }

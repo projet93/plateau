@@ -168,7 +168,10 @@ export class PlateauComponent implements OnInit, OnDestroy {
     this.plateauService.update({ ...plateau, valid: isActivated, statut: Statut.ENCOURS }).subscribe(() => this.loadPage());
   }
   inscription(plateau: IPlateau): void{
-    localStorage.setItem('maxEquipe', JSON.stringify(plateau.nombreEquipeMax));
+    const max : number | undefined = plateau.nombreEquipeMax  ;
+    const nbr : number | undefined = plateau.nombreEquipe ;
+    if(max !== undefined && nbr !== undefined)
+    localStorage.setItem('maxEquipe', JSON.stringify(max - nbr));
     localStorage.setItem('id', JSON.stringify(plateau.id));
     localStorage.setItem('user', JSON.stringify(plateau.user?.id));
     this.router.navigate(['/inscription/new']);

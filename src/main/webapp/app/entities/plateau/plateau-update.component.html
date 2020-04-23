@@ -87,6 +87,14 @@
                         <option [ngValue]="stadeOption.id === editForm.get('stade')!.value?.id ? editForm.get('stade')!.value : stadeOption" *ngFor="let stadeOption of stades; trackBy: trackById">{{ stadeOption.nom }}</option>
                     </select>
                 </div>
+                
+                <div class="form-group">
+                    <label class="form-control-label" jhiTranslate="plateauFffApp.plateau.categorie" for="field_categorie">Categorie</label>
+                    <select class="form-control" id="field_categorie" name="categorie" formControlName="categorie">
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="categorieOption.id === editForm.get('categorie')!.value?.id ? editForm.get('categorie')!.value : categorieOption" *ngFor="let categorieOption of categories; trackBy: trackById">{{ categorieOption.section }}</option>
+                    </select>
+                </div>
             </div>
 
             <div>

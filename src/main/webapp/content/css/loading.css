@@ -84,7 +84,9 @@
     opacity: 1;
   }
 }
-
+hr{
+	margin-top: 0 !important;
+}
 .app-loading {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   position: relative;

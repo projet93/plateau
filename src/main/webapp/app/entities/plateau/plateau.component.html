@@ -51,12 +51,13 @@
 					[callback]="loadPage.bind(this)">
 					<th scope="col" jhiSortBy="id"><span
 						jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
+
+					<th scope="col"  jhiSortBy="categorie.section"><span jhiTranslate="plateauFffApp.plateau.categorie">Categorie</span> <fa-icon icon="sort"></fa-icon></th>
+
 					<th scope="col" jhiSortBy="dateDebut"><span
 						jhiTranslate="plateauFffApp.plateau.dateDebut">Date Debut</span> <fa-icon
 							icon="sort"></fa-icon></th>
-					<th scope="col" jhiSortBy="dateFin"><span
-						jhiTranslate="plateauFffApp.plateau.dateFin">Date Fin</span> <fa-icon
-							icon="sort"></fa-icon></th>
+					
 					
 					
 					<th scope="col" jhiSortBy="programme"><span
@@ -82,8 +83,12 @@
 			<tbody>
 				<tr *ngFor="let plateau of plateaus ;trackBy: trackId">
 					<td><a [routerLink]="['/plateau', plateau.id, 'view']">{{plateau.id }}</a></td>
+					<td>
+                        <div *ngIf="plateau.categorie">
+                            <a [routerLink]="['/categorie', plateau.categorie?.id, 'view']" >{{ plateau.categorie?.section }}</a>
+                        </div>
+                    </td>
 					<td>{{ plateau.dateDebut | date:'mediumDate' }} {{ plateau.heureDebut }}</td>
-					<td>{{ plateau.dateFin | date:'mediumDate' }} {{ plateau.heureFin }}</td>
 					<td class="text-center">
 						<button id="jh-create-entity"
 				class="btn btn-primary btn-sm"
@@ -92,7 +97,7 @@
 			</button>
 						</td>
 					<td class="text-center">{{ plateau.nombreEquipeMax }}</td>
-					<td class="text-center">{{ plateau.nombreEquipeMax -3 }}</td>
+					<td class="text-center">{{ plateau.nombreEquipe }}</td>
 					<td>
 						<div *ngIf="plateau.referent">
 							<a [routerLink]="['/referent', plateau.referent?.id, 'view']">{{

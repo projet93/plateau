@@ -61,6 +61,13 @@ public class CategorieServiceImpl implements CategorieService {
         return categorieRepository.findAll();
     }
 
+    
+    @Override
+    @Transactional(readOnly = true)
+	public List<Categorie> findByUserIsCurrentUser() {
+    	log.debug("Request to get all Categories by user");
+		return categorieRepository.findByUserIsCurrentUser();
+	}
     /**
      * Get one categorie by id.
      *
@@ -100,4 +107,6 @@ public class CategorieServiceImpl implements CategorieService {
             .stream(categorieSearchRepository.search(queryStringQuery(query)).spliterator(), false)
             .collect(Collectors.toList());
     }
+
+	
 }

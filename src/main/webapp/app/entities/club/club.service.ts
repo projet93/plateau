@@ -30,8 +30,8 @@ export class ClubService {
     return this.http.get<IClub>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
-  findByUser(id: number): Observable<EntityResponseType> {
-    return this.http.get<IClub>(`${this.resourceUrlUser}/${id}`, { observe: 'response' });
+  findByUser(): Observable<EntityResponseType> {
+    return this.http.get<IClub>(`${this.resourceUrlUser}`, { observe: 'response' });
   }
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);

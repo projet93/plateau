@@ -14,6 +14,9 @@ import java.util.List;
 @Repository
 public interface CategorieRepository extends JpaRepository<Categorie, Long> {
 
-    @Query("select categorie from Categorie categorie where categorie.user.login = ?#{principal.username}")
+//    @Query("select categorie from Categorie categorie where categorie.user.login = ?#{principal.username}")
+//    List<Categorie> findByUserIsCurrentUser();
+    
+    @Query("select club.categories from Club club where club.user.login = ?#{principal.username}")
     List<Categorie> findByUserIsCurrentUser();
 }

@@ -33,6 +33,9 @@ export class InscriptionService {
     return this.http.get<IInscription[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
+  queryByPlateau(id: number): Observable<EntityArrayResponseType> {
+    return this.http.get<IInscription[]>(this.resourceUrl+'/plateau/'+id, { observe: 'response' });
+  }
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

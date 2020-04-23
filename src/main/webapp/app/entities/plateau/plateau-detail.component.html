@@ -1,62 +1,62 @@
-<div class="row justify-content-center">
-    <div class="col-8">
+<div class="row">
+    <div class="col-5">
         <div *ngIf="plateau">
-            <h2><span jhiTranslate="plateauFffApp.plateau.detail.title">Plateau</span> {{ plateau.id }}</h2>
+            <h2><span jhiTranslate="plateauFffApp.plateau.detail.title">Plateau</span> {{ plateau.id }} : {{ plateau.statut }}</h2>
 
             <hr>
 
             <jhi-alert-error></jhi-alert-error>
 
-            <dl class="row-md jh-entity-details">
-                <dt><span jhiTranslate="plateauFffApp.plateau.dateDebut">Date Debut</span></dt>
-                <dd>
+            <dl class="row">
+                <dt class="col-sm-4"><span jhiTranslate="plateauFffApp.plateau.dateDebut">Date Debut</span></dt>
+                <dd class="col-sm-8">
                     <span>{{ plateau.dateDebut }}</span>
                 </dd>
-                <dt><span jhiTranslate="plateauFffApp.plateau.dateFin">Date Fin</span></dt>
-                <dd>
+                <dt class="col-sm-4"><span jhiTranslate="plateauFffApp.plateau.dateFin">Date Fin</span></dt>
+                <dd class="col-sm-8">
                     <span>{{ plateau.dateFin }}</span>
                 </dd>
-                <dt><span jhiTranslate="plateauFffApp.plateau.heureDebut">Heure Debut</span></dt>
-                <dd>
+                <dt class="col-sm-4"><span jhiTranslate="plateauFffApp.plateau.heureDebut">Heure Debut</span></dt>
+                <dd class="col-sm-8">
                     <span>{{ plateau.heureDebut }}</span>
                 </dd>
-                <dt><span jhiTranslate="plateauFffApp.plateau.heureFin">Heure Fin</span></dt>
-                <dd>
+                <dt class="col-sm-4"><span jhiTranslate="plateauFffApp.plateau.heureFin">Heure Fin</span></dt>
+                <dd class="col-sm-8">
                     <span>{{ plateau.heureFin }}</span>
                 </dd>
-                <dt><span jhiTranslate="plateauFffApp.plateau.programme">Programme</span></dt>
-                <dd>
+                <dt class="col-sm-4"><span jhiTranslate="plateauFffApp.plateau.programme">Programme</span></dt>
+                <dd class="col-sm-8">
                     <div *ngIf="plateau.programme">
                         <a (click)="openFile(plateau?.programmeContentType!, plateau?.programme)" jhiTranslate="entity.action.open">open</a>
                         {{ plateau.programmeContentType }}, {{ byteSize(plateau.programme) }}
                     </div>
                 </dd>
-                <dt><span jhiTranslate="plateauFffApp.plateau.nombreEquipeMax">Nbr Equipe Max</span></dt>
-                <dd>
+                <dt class="col-sm-4"><span jhiTranslate="plateauFffApp.plateau.nombreEquipeMax">Nombre Equipe Max</span></dt>
+                <dd class="col-sm-8">
                     <span>{{ plateau.nombreEquipeMax }}</span>
                 </dd>
-                <dt><span jhiTranslate="plateauFffApp.plateau.statut">Statut</span></dt>
-                <dd>
-                    <span jhiTranslate="{{ 'plateauFffApp.Statut.' + plateau.statut }}">{{ plateau.statut }}</span>
+                <dt class="col-sm-4"><span jhiTranslate="plateauFffApp.plateau.nombreEquipe">Nombre Equipe</span></dt>
+                <dd class="col-sm-8">
+                    <span>{{ plateau.nombreEquipe }}</span>
                 </dd>
-                <dt><span jhiTranslate="plateauFffApp.plateau.valid">Valid</span></dt>
-                <dd>
-                    <span>{{ plateau.valid }}</span>
-                </dd>
-                <dt><span jhiTranslate="plateauFffApp.plateau.referent">Referent</span></dt>
-                <dd>
+                
+                <dt class="col-sm-4"><span jhiTranslate="plateauFffApp.plateau.referent">Referent</span></dt>
+                <dd class="col-sm-8">
                     <div *ngIf="plateau.referent">
                         <a [routerLink]="['/referent', plateau.referent?.id, 'view']">{{ plateau.referent?.nom }}</a>
                     </div>
                 </dd>
-                <dt><span jhiTranslate="plateauFffApp.plateau.user">User</span></dt>
-                <dd>
-                    {{ plateau.user?.id }}
-                </dd>
-                <dt><span jhiTranslate="plateauFffApp.plateau.stade">Stade</span></dt>
-                <dd>
+                
+                <dt class="col-sm-4"><span jhiTranslate="plateauFffApp.plateau.stade">Stade</span></dt>
+                <dd class="col-sm-8">
                     <div *ngIf="plateau.stade">
                         <a [routerLink]="['/stade', plateau.stade?.id, 'view']">{{ plateau.stade?.nom }}</a>
+                    </div>
+                </dd>
+                <dt class="col-sm-4"><span jhiTranslate="plateauFffApp.plateau.categorie">Categorie</span></dt>
+                <dd class="col-sm-8">
+                    <div *ngIf="plateau.categorie">
+                        <a [routerLink]="['/categorie', plateau.categorie?.id, 'view']">{{ plateau.categorie?.section }}</a>
                     </div>
                 </dd>
             </dl>
@@ -73,5 +73,9 @@
                 <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
             </button>
         </div>
+    </div>
+    <div class="col-7">
+
+        <jhi-inscription></jhi-inscription>
     </div>
 </div>

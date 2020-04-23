@@ -11,10 +11,14 @@ import { IPlateau } from 'app/shared/model/plateau.model';
 export class PlateauDetailComponent implements OnInit {
   plateau: IPlateau | null = null;
 
-  constructor(protected dataUtils: JhiDataUtils, protected activatedRoute: ActivatedRoute) {}
+  constructor(protected dataUtils: JhiDataUtils, protected activatedRoute: ActivatedRoute) {
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ plateau }) => (this.plateau = plateau));
+    localStorage.setItem('id', JSON.stringify(this.plateau?.id));
+    localStorage.setItem('user', JSON.stringify(this.plateau?.user?.id));
+
   }
 
   byteSize(base64String: string): string {

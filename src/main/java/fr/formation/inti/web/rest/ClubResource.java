@@ -158,10 +158,10 @@ public class ClubResource {
     }
     
     
-    @GetMapping("/clubs/user/{id}")
-    public ResponseEntity<Club> getClubByUser(@PathVariable Long id) {
-        log.debug("REST request to get Club : {}", id);
-        Optional<Club> club = clubService.findByUser(id);
+    @GetMapping("/clubs/user")
+    public ResponseEntity<Club> getClubByUser() {
+        log.debug("REST request to get Club : {}");
+        Optional<Club> club = clubService.findByUser();
         return ResponseUtil.wrapOrNotFound(club);
     }
     /**

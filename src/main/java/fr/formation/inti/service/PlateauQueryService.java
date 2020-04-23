@@ -104,6 +104,9 @@ public class PlateauQueryService extends QueryService<Plateau> {
             if (criteria.getNombreEquipeMax() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getNombreEquipeMax(), Plateau_.nombreEquipeMax));
             }
+//            if (criteria.getNombreEquipe() != null) {
+//                specification = specification.and(buildRangeSpecification(criteria.getNombreEquipe(), Plateau_.nombreEquipe));
+//            }
             if (criteria.getStatut() != null) {
                 specification = specification.and(buildSpecification(criteria.getStatut(), Plateau_.statut));
             }
@@ -121,6 +124,10 @@ public class PlateauQueryService extends QueryService<Plateau> {
             if (criteria.getStadeId() != null) {
                 specification = specification.and(buildSpecification(criteria.getStadeId(),
                     root -> root.join(Plateau_.stade, JoinType.LEFT).get(Stade_.id)));
+            }
+            if (criteria.getCategorieId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCategorieId(),
+                    root -> root.join(Plateau_.categorie, JoinType.LEFT).get(Categorie_.id)));
             }
         }
         return specification;

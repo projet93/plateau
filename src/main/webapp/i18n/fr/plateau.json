@@ -22,13 +22,14 @@
       "heureDebut": "Heure Debut",
       "heureFin": "Heure Fin",
       "programme": "Programme",
-      "nombreEquipeMax": "Nombre Equipe Max",
-      "nombreEquipe": "Nombre Equipe",
+      "nombreEquipeMax": "Equipes Max",
+      "nombreEquipe": "Equipes participantes",
       "statut": "Statut",
       "valid": "Valid",
       "referent": "Referent",
       "user": "User",
-      "stade": "Stade"
+      "stade": "Stade",
+      "categorie": "Categorie"
     }
   }
 }

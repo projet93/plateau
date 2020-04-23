@@ -88,7 +88,7 @@ public class InscriptionResource {
         if (inscription.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Inscription result = inscriptionService.save(inscription);
+        Inscription result = inscriptionService.update(inscription);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, inscription.getId().toString()))
             .body(result);
@@ -103,6 +103,12 @@ public class InscriptionResource {
     public List<Inscription> getAllInscriptions() {
         log.debug("REST request to get all Inscriptions");
         return inscriptionService.findAll();
+    }
+    
+    @GetMapping("/inscriptions/plateau/{id}")
+    public List<Inscription> getAllInscriptionsByPlateau(@PathVariable Long id) {
+        log.debug("REST request to get all Inscriptions");
+        return inscriptionService.findAllByPlateau(id);
     }
 
     /**

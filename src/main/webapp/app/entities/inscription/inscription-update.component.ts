@@ -28,7 +28,7 @@ export class InscriptionUpdateComponent implements OnInit {
 
   editForm = this.fb.group({
     id: [],
-    nombreEquipe: [null, [Validators.required,Validators.max(+localStorage['maxEquipe'])]],
+    nombreEquipe: [null, [Validators.required,Validators.max(localStorage['maxEquipe'])]],
     plateau: [],
     club: [],
     referent: []
@@ -44,12 +44,10 @@ export class InscriptionUpdateComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.activatedRoute.data.subscribe(({ inscription }) => {
+    this.activatedRoute.data.subscribe(({ inscription }) => {      
       this.updateForm(inscription);
-
-      this.plateauService.query().subscribe((res: HttpResponse<IPlateau[]>) => (this.plateaus = res.body || []));
-     
-      this.clubService.findByUser(localStorage['user']).subscribe((res: HttpResponse<IClub>) => (this.club = res.body || new Club()));
+      this.plateauService.query().subscribe((res: HttpResponse<IPlateau[]>) => (this.plateaus = res.body || []));     
+      this.clubService.findByUser().subscribe((res: HttpResponse<IClub>) => (this.club = res.body || new Club()));
       this.referentService.query().subscribe((res: HttpResponse<IReferent[]>) => (this.referents = res.body || []));
     });
   }
@@ -72,10 +70,11 @@ export class InscriptionUpdateComponent implements OnInit {
     window.console.log('=========================',this.club);  
     this.isSaving = true;
     const inscription = this.createFromForm();
-    if (inscription.id !== undefined) {
+    inscription.club = this.club;
+    if (inscription.id !== undefined) {      
       this.subscribeToSaveResponse(this.inscriptionService.update(inscription));
     } else {
-      inscription.club = this.club;
+      
       this.subscribeToSaveResponse(this.inscriptionService.create(inscription));
     }
   }

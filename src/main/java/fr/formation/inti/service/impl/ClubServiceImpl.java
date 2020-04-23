@@ -86,9 +86,9 @@ public class ClubServiceImpl implements ClubService {
     
     @Override
     @Transactional(readOnly = true)
-    public Optional<Club> findByUser(Long id) {
+    public Optional<Club> findByUser() {
     	
-    	return clubRepository.findClubByUserIsCurrentUser(id);
+    	return clubRepository.findClubByUserIsCurrentUser();
     }
 
     /**

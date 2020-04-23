@@ -34,6 +34,7 @@ entity Plateau {
     heureFin String,
     programme Blob,
     nombreEquipeMax Integer,
+    nombreEquipe Integer,
     statut Statut,
     valid Boolean
 }
@@ -47,7 +48,7 @@ entity Inscription {
 
 
 relationship OneToMany {
-	Club{stade(nom)} to Stade{club(nom)},
+	Club{stade(nom)} to Stade{club(nom)}
 }
 relationship ManyToMany {
     Club{categorie(section)} to Categorie{club(nom)}
@@ -63,7 +64,8 @@ relationship ManyToOne {
     Inscription{club(nom)} to Club,
     Inscription{referent(nom)} to Referent,
     Plateau{stade(nom)} to Stade,
-    Club{user} to User
+    Club{user} to User,
+    Plateau{categorie(section)} to Categorie
 }
 
 paginate Plateau, Club, Stade with infinite-scroll

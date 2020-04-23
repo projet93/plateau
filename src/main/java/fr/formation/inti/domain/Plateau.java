@@ -52,6 +52,9 @@ public class Plateau implements Serializable {
     @Column(name = "nombre_equipe_max")
     private Integer nombreEquipeMax;
 
+    @Column(name = "nombre_equipe")
+    private Integer nombreEquipe;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "statut")
     private Statut statut;
@@ -71,9 +74,14 @@ public class Plateau implements Serializable {
     @JsonIgnoreProperties("plateaus")
     private Stade stade;
 
+    @ManyToOne
+    @JsonIgnoreProperties("plateaus")
+    private Categorie categorie;
+
     @Version
     @Column(name = "version")
     private Long version;
+    
     
     public Long getVersion() {
 		return version;
@@ -183,6 +191,19 @@ public class Plateau implements Serializable {
         this.nombreEquipeMax = nombreEquipeMax;
     }
 
+    public Integer getNombreEquipe() {
+        return nombreEquipe;
+    }
+
+    public Plateau nombreEquipe(Integer nombreEquipe) {
+        this.nombreEquipe = nombreEquipe;
+        return this;
+    }
+
+    public void setNombreEquipe(Integer nombreEquipe) {
+        this.nombreEquipe = nombreEquipe;
+    }
+
     public Statut getStatut() {
         return statut;
     }
@@ -247,6 +268,19 @@ public class Plateau implements Serializable {
     public void setStade(Stade stade) {
         this.stade = stade;
     }
+
+    public Categorie getCategorie() {
+        return categorie;
+    }
+
+    public Plateau categorie(Categorie categorie) {
+        this.categorie = categorie;
+        return this;
+    }
+
+    public void setCategorie(Categorie categorie) {
+        this.categorie = categorie;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -276,6 +310,7 @@ public class Plateau implements Serializable {
             ", programme='" + getProgramme() + "'" +
             ", programmeContentType='" + getProgrammeContentType() + "'" +
             ", nombreEquipeMax=" + getNombreEquipeMax() +
+            ", nombreEquipe=" + getNombreEquipe() +
             ", statut='" + getStatut() + "'" +
             ", valid='" + isValid() + "'" +
             "}";
