@@ -62,6 +62,10 @@ public class Plateau implements Serializable {
     @Column(name = "valid")
     private Boolean valid;
 
+    @Version
+    @Column(name = "version")
+    private Long version;
+
     @ManyToOne
     @JsonIgnoreProperties("plateaus")
     private Referent referent;
@@ -78,20 +82,7 @@ public class Plateau implements Serializable {
     @JsonIgnoreProperties("plateaus")
     private Categorie categorie;
 
-    @Version
-    @Column(name = "version")
-    private Long version;
-    
-    
-    public Long getVersion() {
-		return version;
-	}
-
-	public void setVersion(Long version) {
-		this.version = version;
-	}
-
-	// jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
@@ -230,6 +221,19 @@ public class Plateau implements Serializable {
         this.valid = valid;
     }
 
+    public Long getVersion() {
+        return version;
+    }
+
+    public Plateau version(Long version) {
+        this.version = version;
+        return this;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
     public Referent getReferent() {
         return referent;
     }
@@ -313,6 +317,7 @@ public class Plateau implements Serializable {
             ", nombreEquipe=" + getNombreEquipe() +
             ", statut='" + getStatut() + "'" +
             ", valid='" + isValid() + "'" +
+            ", version=" + getVersion() +
             "}";
     }
 }

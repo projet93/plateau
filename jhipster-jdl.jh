@@ -36,7 +36,8 @@ entity Plateau {
     nombreEquipeMax Integer,
     nombreEquipe Integer,
     statut Statut,
-    valid Boolean
+    valid Boolean,
+    version Long
 }
 
 enum Statut{

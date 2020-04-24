@@ -35,7 +35,9 @@
     "entitySuffix": "",
     "dtoSuffix": "DTO",
     "otherModules": [],
-    "blueprints": []
+    "blueprints": [],
+    "herokuAppName": "plateau-fff",
+    "herokuDeployType": "git"
   },
   "git-provider": "GitHub",
   "git-company": "inti-formation-y",
