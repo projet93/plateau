@@ -17,6 +17,7 @@ export interface IPlateau {
   nombreEquipe?: number;
   statut?: Statut;
   valid?: boolean;
+  version?: number;
   referent?: IReferent;
   user?: IUser;
   stade?: IStade;
@@ -36,6 +37,7 @@ export class Plateau implements IPlateau {
     public nombreEquipe?: number,
     public statut?: Statut,
     public valid?: boolean,
+    public version?: number,
     public referent?: IReferent,
     public user?: IUser,
     public stade?: IStade,

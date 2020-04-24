@@ -46,6 +46,9 @@
             <column name="valid" type="boolean">
                 <constraints nullable="true" />
             </column>
+            <column name="version" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <column name="referent_id" type="bigint">
                 <constraints nullable="true" />
             </column>
@@ -91,6 +94,7 @@
             <column name="nombre_equipe" type="numeric"/>
             <column name="statut" type="string"/>
             <column name="valid" type="boolean"/>
+            <column name="version" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

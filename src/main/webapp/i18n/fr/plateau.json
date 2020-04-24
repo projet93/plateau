@@ -2,7 +2,7 @@
   "plateauFffApp": {
     "plateau": {
       "home": {
-        "title": "Plateau",
+        "title": "Plateaus",
         "createLabel": "Créer un nouveau Plateau",
         "createOrEditLabel": "Créer ou éditer un Plateau",
         "search": "Recherche pour Plateau",
@@ -22,10 +22,11 @@
       "heureDebut": "Heure Debut",
       "heureFin": "Heure Fin",
       "programme": "Programme",
-      "nombreEquipeMax": "Equipes Max",
-      "nombreEquipe": "Equipes participantes",
+      "nombreEquipeMax": "Nombre Equipe Max",
+      "nombreEquipe": "Nombre Equipe",
       "statut": "Statut",
       "valid": "Valid",
+      "version": "Version",
       "referent": "Referent",
       "user": "User",
       "stade": "Stade",

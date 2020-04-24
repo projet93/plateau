@@ -41,6 +41,10 @@
         {
             "fieldName": "valid",
             "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "version",
+            "fieldType": "Long"
         }
     ],
     "relationships": [
