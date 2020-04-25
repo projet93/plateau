@@ -7,7 +7,7 @@ import fr.formation.inti.repository.ReferentRepository;
 import fr.formation.inti.repository.search.ReferentSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,13 +26,14 @@ public class ReferentServiceImpl implements ReferentService {
 
     private final Logger log = LoggerFactory.getLogger(ReferentServiceImpl.class);
 
-    private final ReferentRepository referentRepository;
+    @Autowired
+    private ReferentRepository referentRepository;
 
-    private final ReferentSearchRepository referentSearchRepository;
+    @Autowired
+    private ReferentSearchRepository referentSearchRepository;
 
-    public ReferentServiceImpl(ReferentRepository referentRepository, ReferentSearchRepository referentSearchRepository) {
-        this.referentRepository = referentRepository;
-        this.referentSearchRepository = referentSearchRepository;
+    public ReferentServiceImpl() {
+     
     }
 
     /**

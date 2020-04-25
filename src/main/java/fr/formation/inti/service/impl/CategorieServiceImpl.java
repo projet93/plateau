@@ -6,7 +6,7 @@ import fr.formation.inti.repository.CategorieRepository;
 import fr.formation.inti.repository.search.CategorieSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,13 +26,14 @@ public class CategorieServiceImpl implements CategorieService {
 
     private final Logger log = LoggerFactory.getLogger(CategorieServiceImpl.class);
 
-    private final CategorieRepository categorieRepository;
+    @Autowired
+    private CategorieRepository categorieRepository;
 
-    private final CategorieSearchRepository categorieSearchRepository;
+    @Autowired
+    private CategorieSearchRepository categorieSearchRepository;
 
-    public CategorieServiceImpl(CategorieRepository categorieRepository, CategorieSearchRepository categorieSearchRepository) {
-        this.categorieRepository = categorieRepository;
-        this.categorieSearchRepository = categorieSearchRepository;
+    public CategorieServiceImpl() {
+       
     }
 
     /**

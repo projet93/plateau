@@ -6,7 +6,7 @@ import fr.formation.inti.repository.ClubRepository;
 import fr.formation.inti.repository.search.ClubSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,13 +25,14 @@ public class ClubServiceImpl implements ClubService {
 
     private final Logger log = LoggerFactory.getLogger(ClubServiceImpl.class);
 
-    private final ClubRepository clubRepository;
+    @Autowired
+    private ClubRepository clubRepository;
 
-    private final ClubSearchRepository clubSearchRepository;
+    @Autowired
+    private ClubSearchRepository clubSearchRepository;
 
-    public ClubServiceImpl(ClubRepository clubRepository, ClubSearchRepository clubSearchRepository) {
-        this.clubRepository = clubRepository;
-        this.clubSearchRepository = clubSearchRepository;
+    public ClubServiceImpl() {
+        
     }
 
     /**

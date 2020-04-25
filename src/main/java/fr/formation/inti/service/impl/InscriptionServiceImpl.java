@@ -34,17 +34,16 @@ public class InscriptionServiceImpl implements InscriptionService {
 
 	private final Logger log = LoggerFactory.getLogger(InscriptionServiceImpl.class);
 
-	private final InscriptionRepository inscriptionRepository;
+	@Autowired
+	private InscriptionRepository inscriptionRepository;
 
 	@Autowired
 	private PlateauRepository plateauRepository;
 
-	private final InscriptionSearchRepository inscriptionSearchRepository;
+	@Autowired
+	private InscriptionSearchRepository inscriptionSearchRepository;
 
-	public InscriptionServiceImpl(InscriptionRepository inscriptionRepository,
-			InscriptionSearchRepository inscriptionSearchRepository) {
-		this.inscriptionRepository = inscriptionRepository;
-		this.inscriptionSearchRepository = inscriptionSearchRepository;
+	public InscriptionServiceImpl() {
 	}
 
 	/**
@@ -143,7 +142,12 @@ public class InscriptionServiceImpl implements InscriptionService {
 	@Override
 	public void delete(Long id) {
 		log.debug("Request to delete Inscription : {}", id);
+		Inscription inscription = inscriptionRepository.getOne(id);
+		Plateau plateau = plateauRepository.findOneWithEagerRelationships(inscription.getPlateau().getId()).get();
+		plateau.setNombreEquipe(plateau.getNombreEquipe() - inscription.getNombreEquipe());
+		plateau.setStatut(Statut.ENCOURS);
 		inscriptionRepository.deleteById(id);
+		plateauRepository.save(plateau);
 		inscriptionSearchRepository.deleteById(id);
 	}
 

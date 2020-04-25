@@ -8,6 +8,7 @@ import javax.persistence.LockModeType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Lock;
@@ -28,13 +29,14 @@ public class PlateauServiceImpl implements PlateauService {
 
     private final Logger log = LoggerFactory.getLogger(PlateauServiceImpl.class);
 
-    private final PlateauRepository plateauRepository;
+    @Autowired
+    private PlateauRepository plateauRepository;
 
-    private final PlateauSearchRepository plateauSearchRepository;
+    @Autowired
+    private PlateauSearchRepository plateauSearchRepository;
 
-    public PlateauServiceImpl(PlateauRepository plateauRepository, PlateauSearchRepository plateauSearchRepository) {
-        this.plateauRepository = plateauRepository;
-        this.plateauSearchRepository = plateauSearchRepository;
+    public PlateauServiceImpl() {
+      
     }
 
     /**
