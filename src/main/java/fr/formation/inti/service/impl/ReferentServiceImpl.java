@@ -1,10 +1,9 @@
 package fr.formation.inti.service.impl;
 
-import fr.formation.inti.service.ReferentService;
-import fr.formation.inti.domain.Referent;
-import fr.formation.inti.domain.Stade;
-import fr.formation.inti.repository.ReferentRepository;
-import fr.formation.inti.repository.search.ReferentSearchRepository;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import fr.formation.inti.domain.Referent;
+import fr.formation.inti.repository.ReferentRepository;
+import fr.formation.inti.repository.search.ReferentSearchRepository;
+import fr.formation.inti.service.ReferentService;
 
 /**
  * Service Implementation for managing {@link Referent}.
