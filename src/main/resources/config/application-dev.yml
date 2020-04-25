@@ -50,9 +50,9 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/plateauFFF?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
-    username: root
-    password: 123456
+    url: jdbc:mysql://ry8k89ynd59vb7l4:hjxfjg8vhrwfsxob@onnjomlc4vqc55fw.chr7pe7iynqr.eu-west-1.rds.amazonaws.com:3306/bxcyaxuzwg0prloh&createDatabaseIfNotExist=true
+    username: ry8k89ynd59vb7l4
+    password: hjxfjg8vhrwfsxob
     hikari:
       poolName: Hikari
       auto-commit: false
