@@ -6,7 +6,7 @@ import fr.formation.inti.repository.StadeRepository;
 import fr.formation.inti.repository.search.StadeSearchRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,14 +24,16 @@ import static org.elasticsearch.index.query.QueryBuilders.*;
 public class StadeServiceImpl implements StadeService {
 
     private final Logger log = LoggerFactory.getLogger(StadeServiceImpl.class);
+    
+    @Autowired
+    private StadeRepository stadeRepository;
 
-    private final StadeRepository stadeRepository;
+    @Autowired
+    private StadeSearchRepository stadeSearchRepository;
 
-    private final StadeSearchRepository stadeSearchRepository;
-
-    public StadeServiceImpl(StadeRepository stadeRepository, StadeSearchRepository stadeSearchRepository) {
-        this.stadeRepository = stadeRepository;
-        this.stadeSearchRepository = stadeSearchRepository;
+    public StadeServiceImpl() {
+        
+     
     }
 
     /**
