@@ -1,12 +1,11 @@
 package fr.formation.inti.service;
 
-import fr.formation.inti.domain.Plateau;
-import fr.formation.inti.domain.Stade;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Optional;
+import fr.formation.inti.domain.Plateau;
 
 /**
  * Service Interface for managing {@link Plateau}.

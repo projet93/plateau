@@ -2,8 +2,6 @@ package fr.formation.inti.service;
 
 import java.util.List;
 
-import javax.persistence.criteria.JoinType;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -12,13 +10,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.github.jhipster.service.QueryService;
-
+// for static metamodels
 import fr.formation.inti.domain.Referent;
-import fr.formation.inti.domain.*; // for static metamodels
+import fr.formation.inti.domain.Referent_;
 import fr.formation.inti.repository.ReferentRepository;
-import fr.formation.inti.repository.search.ReferentSearchRepository;
 import fr.formation.inti.service.dto.ReferentCriteria;
+import io.github.jhipster.service.QueryService;
 
 /**
  * Service for executing complex queries for {@link Referent} entities in the database.
@@ -34,11 +31,11 @@ public class ReferentQueryService extends QueryService<Referent> {
 
     private final ReferentRepository referentRepository;
 
-    private final ReferentSearchRepository referentSearchRepository;
+    
 
-    public ReferentQueryService(ReferentRepository referentRepository, ReferentSearchRepository referentSearchRepository) {
+    public ReferentQueryService(ReferentRepository referentRepository) {
         this.referentRepository = referentRepository;
-        this.referentSearchRepository = referentSearchRepository;
+        
     }
 
     /**

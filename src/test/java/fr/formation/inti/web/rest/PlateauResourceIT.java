@@ -1,20 +1,29 @@
 package fr.formation.inti.web.rest;
 
-import fr.formation.inti.PlateauFffApp;
-import fr.formation.inti.domain.Plateau;
-import fr.formation.inti.domain.Referent;
-import fr.formation.inti.domain.User;
-import fr.formation.inti.domain.Stade;
-import fr.formation.inti.domain.Categorie;
-import fr.formation.inti.repository.PlateauRepository;
-import fr.formation.inti.repository.search.PlateauSearchRepository;
-import fr.formation.inti.service.PlateauService;
-import fr.formation.inti.service.dto.PlateauCriteria;
-import fr.formation.inti.service.PlateauQueryService;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
+import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Collections;
+import java.util.List;
+
+import javax.persistence.EntityManager;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,20 +36,17 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Base64Utils;
-import javax.persistence.EntityManager;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Collections;
-import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
-import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
+import fr.formation.inti.PlateauFffApp;
+import fr.formation.inti.domain.Categorie;
+import fr.formation.inti.domain.Plateau;
+import fr.formation.inti.domain.Referent;
+import fr.formation.inti.domain.Stade;
+import fr.formation.inti.domain.User;
 import fr.formation.inti.domain.enumeration.Statut;
+import fr.formation.inti.repository.PlateauRepository;
+import fr.formation.inti.repository.search.PlateauSearchRepository;
+import fr.formation.inti.service.PlateauService;
 /**
  * Integration tests for the {@link PlateauResource} REST controller.
  */
@@ -97,8 +103,7 @@ public class PlateauResourceIT {
     @Autowired
     private PlateauSearchRepository mockPlateauSearchRepository;
 
-    @Autowired
-    private PlateauQueryService plateauQueryService;
+    
 
     @Autowired
     private EntityManager em;

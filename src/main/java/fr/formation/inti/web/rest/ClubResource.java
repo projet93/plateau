@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import fr.formation.inti.domain.Club;
-import fr.formation.inti.domain.Stade;
 import fr.formation.inti.domain.User;
 import fr.formation.inti.security.AuthoritiesConstants;
 import fr.formation.inti.service.ClubService;

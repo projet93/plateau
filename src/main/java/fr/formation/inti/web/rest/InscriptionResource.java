@@ -1,28 +1,31 @@
 package fr.formation.inti.web.rest;
 
-import fr.formation.inti.domain.Inscription;
-import fr.formation.inti.domain.Plateau;
-import fr.formation.inti.service.InscriptionService;
-import fr.formation.inti.service.PlateauService;
-import fr.formation.inti.web.rest.errors.BadRequestAlertException;
-
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.ResponseUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
 
-import static org.elasticsearch.index.query.QueryBuilders.*;
+import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import fr.formation.inti.domain.Inscription;
+import fr.formation.inti.service.InscriptionService;
+import fr.formation.inti.web.rest.errors.BadRequestAlertException;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link fr.formation.inti.domain.Inscription}.
@@ -38,8 +41,6 @@ public class InscriptionResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
     
-    @Autowired
-    private PlateauService plateauService;
     
     private final InscriptionService inscriptionService;
 
@@ -60,13 +61,7 @@ public class InscriptionResource {
         if (inscription.getId() != null) {
             throw new BadRequestAlertException("A new inscription cannot already have an ID", ENTITY_NAME, "idexists");
         }
-//        Optional<Plateau> plateau = plateauService.findOne(inscription.getPlateau().getId());
-//        Integer nbrMax = plateau.get().getNombreEquipeMax();
-//        
-//        if(inscription.getNombreEquipe() <= nbrMax) {
-//        	plateau.get().setNombreEquipeMax(nbrMax - inscription.getNombreEquipe());
-//        	plateauService.save(plateau.get());
-//        }
+
         Inscription result = inscriptionService.save(inscription);
         return ResponseEntity.created(new URI("/api/inscriptions/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))

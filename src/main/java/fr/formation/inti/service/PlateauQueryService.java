@@ -12,13 +12,16 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import io.github.jhipster.service.QueryService;
-
+// for static metamodels
+import fr.formation.inti.domain.Categorie_;
 import fr.formation.inti.domain.Plateau;
-import fr.formation.inti.domain.*; // for static metamodels
+import fr.formation.inti.domain.Plateau_;
+import fr.formation.inti.domain.Referent_;
+import fr.formation.inti.domain.Stade_;
+import fr.formation.inti.domain.User_;
 import fr.formation.inti.repository.PlateauRepository;
-import fr.formation.inti.repository.search.PlateauSearchRepository;
 import fr.formation.inti.service.dto.PlateauCriteria;
+import io.github.jhipster.service.QueryService;
 
 /**
  * Service for executing complex queries for {@link Plateau} entities in the database.
@@ -34,11 +37,10 @@ public class PlateauQueryService extends QueryService<Plateau> {
 
     private final PlateauRepository plateauRepository;
 
-    private final PlateauSearchRepository plateauSearchRepository;
+    
 
-    public PlateauQueryService(PlateauRepository plateauRepository, PlateauSearchRepository plateauSearchRepository) {
+    public PlateauQueryService(PlateauRepository plateauRepository) {
         this.plateauRepository = plateauRepository;
-        this.plateauSearchRepository = plateauSearchRepository;
     }
 
     /**
